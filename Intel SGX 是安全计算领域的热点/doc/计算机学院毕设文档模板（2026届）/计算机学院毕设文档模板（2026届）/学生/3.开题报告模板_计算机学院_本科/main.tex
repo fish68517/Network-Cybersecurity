@@ -1,0 +1,219 @@
+\documentclass{article}
+\usepackage{wzu-report-style}
+\usepackage{enumerate}
+
+\usepackage[breaklinks,colorlinks,linkcolor=black,citecolor=black,urlcolor=black]{hyperref}
+
+\usepackage{graphicx, subfig, epstopdf, amsmath, booktabs, paralist, float, caption, xfrac, enumitem, array, multirow, cite}
+
+\usepackage{subfloat}
+
+\usepackage[heading=true]{ctex}
+
+\usepackage{zhnumber} % change section number to chinese
+\renewcommand\thesection{\zhnum{section}}
+\renewcommand \thesubsection {\arabic{section}}
+
+\usepackage{url}
+%\usepackage{cite}
+% comma： 用逗号分隔多个引用； square：使用方括号； super：引用是上角标形式
+\usepackage[square,sort,comma,numbers]{natbib}
+\def\bibfont{\fontsize{10.5pt}{12}\selectfont}
+
+\usepackage{titlesec}
+\titleformat{\section}{\kaishu\zihao{4}}{\thesection、}{0em}{}
+\titleformat{\subsubsection}{\kaishu\bfseries\zihao{-4}}{\thesection}{0em}{}
+
+
+\usepackage{caption}
+\DeclareCaptionLabelSeparator{twospace}{\ ~}   %这三条语句即可
+\captionsetup[figure]{labelsep=period,name={\kaishu 图}}
+
+\makeatletter
+\newcommand\dlmu@underline[2][6cm]{%
+	\hskip1pt\underline{\hb@xt@ #1{\hss#2\hss}}\hskip3pt}
+\let\coverunderline\dlmu@underline
+\makeatother
+
+
+
+\renewcommand\figureautorefname{图}		% 重新定义引用图标
+\renewcommand\tableautorefname{表}		% 重新定义应用表格
+\def\equationautorefname{式}				% 重新定义公式
+
+% 论文中文标题
+\ctitle{基于卷积神经网络的手写数字及写字人识别}
+
+% 作者详细信息
+\cauthor{王\ 小\ 明}        % 作者姓名
+\studentid{12350004}       % 学号
+\cschool{计算机与人工智能学院}        % 学院
+\cclass{22级计算机1班}         %班级
+\cmajor{计算机科学与技术}    %专业
+\cyear{2026}               %毕业年份
+
+% 指导老师信息
+\cmentor{王大明 \ (教授)}
+
+%指导老师意见
+%\cmentorcomments{该开题报告选题具有一定的理论价值与实践意义，研究目标明确，研究内容充实，结构安排合理。研究方法选择恰当，研究计划基本可行，同意开题。希望在后续研究中，能进一步细化研究方案，并注意对可能遇到的难点做好预案，确保毕业设计顺利实施。}
+
+
+\begin{document}
+\section{选题的背景与意义：}
+
+% \section{研究的基本内容与拟解决的主要问题}之前的内容，完成后删除
+开题报告正文字数不少于2000汉字，对选题背景意义、课题研究的基本内容及拟解决的主要问题有科学、清晰的认识，采用的研究的方法和技术路线科学，研究的安排进度合理，与选题相关的参考文献在20篇以上，且包含5篇外文文献（特殊专业除外），近5年参考文献占70\%。
+
+\subsection*{表格的使用}
+表格的使用可以通过 \textbackslash table\{\}。详细说明如图\ref{tablea}所示。
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.65\linewidth]{image/table.png}
+	\caption{表格使用}
+	\label{tablea}
+\end{figure}
+
+通过绘制我们可以得到表如表\ref{table}所示。
+\begin{table}[htbp]
+	\centering
+	\caption{表格的使用}
+	\begin{tabular}{llll} 
+		\hline
+		字段名      & 类型   & 长度 & 备注    \\ 
+		\hline
+		Id       & int  & ~  & 自动增加  \\ 
+		\hline
+		UserName & Char & 50 & 用户名   \\
+		\hline
+	\end{tabular}
+	\label{table}
+\end{table}
+
+\subsection*{公式的使用}
+\begin{equation}
+	q+q = 2q
+	\label{gongshi}
+\end{equation}
+公式可通过 \textbackslash begin\{ equation \}使用，引用可通过\textbackslash label，具体操作下文会提及。
+
+\subsection*{图片的使用}
+图片的使用可通过\textbackslash begin\{figure\}实现，其中[htbp]可控制图片位置。见图\ref{pic}。
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.65\linewidth]{image/figure.png}
+	\caption{图片使用}
+	\label{pic}
+\end{figure}
+
+\subsection*{多图排版样例}
+本章节提供几个多图摆放的样例。
+\begin{figure}[htbp]
+	\begin{minipage}[t]{0.48\linewidth}
+		\centering
+		\includegraphics[width=0.9\textwidth]{image/chap04/1.jpg}
+		\caption{图1-1裂缝对照图}
+		\label{fig:side:a}
+	\end{minipage}%
+	\begin{minipage}[t]{0.48\linewidth}
+		\centering
+		\includegraphics[width=0.9\textwidth]{image/chap04/2.jpg}  % 2.2in
+		\caption{图1-2裂缝对照图}
+		\label{fig:side:b}
+	\end{minipage}
+\end{figure}
+
+
+\begin{figure}[!htp]
+	\centering
+	\subfloat[附件一中图1-2]{\includegraphics[width=0.4\textwidth]{image/chap04/2.jpg}}\qquad
+	\subfloat[附件一中图1-8]{\includegraphics[width=0.4\textwidth]{image/chap04/2.jpg}} \\
+	\caption{高斯模糊降噪后图像对比}
+	\label{cpm-1}
+\end{figure}
+
+\subsection*{交叉引用}
+在\LaTeX 中，我们可以通过\textbackslash ref\{\}来对任何表格、图片、章节等进行引用。我们\textbackslash label 来对这些需要引用的命名，再在正文中通过 \textbackslash ref\{XX\}来进行引用。例如\ref{fig:side:a}，\ref{author}。但是这种方式不能自动识别图表公式，需要自行添加“图”。
+
+已定义自动引用格式，所有引用图片、公式、表格等内容均使用同一个命令`\textbackslash autoref\{\}`进行引用，该命令将会自动产生例如` 式``图 `等前置词语。例如\autoref{cpm-1}，\autoref{author}。
+
+\subsection*{本地安装软件或者线上使用}
+
+网络查找tex编辑工具，例如按照https://zhuanlan.zhihu.com/p/1921310237857648721安装软件。安装完成后，编译文档需要使用 XeLaTeX。例如，TexStudio中可以在，“选项”->“设置”->“构建”->“默认编辑器”中选择XeLaTeX。
+
+可以直接使用第三方 LaTeX 线上编译平台模板库 [TeXPage](https://www.texpage.com/)，或者[Overleaf](https://www.overleaf.com/)在线使用。编译文档需要使用 XeLaTeX.
+
+
+\subsection*{参考文献说明}
+参考文献是毕业设计(论文)不可缺少的组成部分,它反映毕业设计(论文)的取材来源、材料的广博程度和材料的可靠程度,也是作者对他人知识成果的承认和尊重。一份完整的参考文献可向读者提供一份有价值的信息资料,列入的文献应在 20 篇以上(外文文献至少有5篇)，并且近五年文献不少于70\%。
+
+参考文献的著录方法采用我国国家标准GB7714-87《文后参考文献著录规则》中规定采用的“顺序编码制”，中外文混编。论文中，引用出处按引用先后顺序用阿拉伯数字和方括号“[]”放在引文结束处最后一个字的右上角作为对参考文献表相应条目的呼应。文后参考文献表中，各条文献按在论文中的文献序号顺序排列\overcite{杨蕴林2007,VoxResNet2018,郝远2023,同任2009}。
+
+参考文献引用，需按顺序引用，可利用交叉引用。其引用的文献，需采用上标字体，具体格式已在本文档做好，选中引用部分。例如，LeCun等\overcite{LeCun1998}提出卷积神经网络。
+
+参考文献均使用 bibtex 的形式记录在`main.bib'文件中，当需要引用时可使用`\textbackslash cite`和`\textbackslash overcite\`两个命令引用，前者为引用符号处于文本基线，后者为上标形式。会议论文用@inproceedings{}\overcite{Ngiam2010}，期刊论文用@article{}\overcite{LeCun1998}，书籍用@book{}\overcite{刘国钧1957}，学位论文用@mastersthesis{}\overcite{田露2011}、@phdthesis{}\overcite{田某2011}等。
+
+如果增加参考文献，可以在`main.bib`文件中增加，保存后使用bibtex
+编译文档。有时候，旧的辅助文件可能会干扰编译过程。你可以手动删除.aux、.bbl、.blg、.log等文件，然后重新编译你的文档\overcite{Multi2024,Dynamic2022,赵丽凤2025,卢凤达2024,付钧渤2025}。或者，直接到控制台找到对应路径后，使用“bibtex main”重新生成main.bbl文件\overcite{姜锡洲1989,汉语拼音正词法基本规则1996,谢希德1998,冯西桥1997,王明亮1998,Krizhevsky2012,Zeiler2010}。
+
+
+
+
+
+\newpage
+\section{研究的基本内容与拟解决的主要问题：}
+
+
+
+
+
+\newpage
+\section{研究的方法与技术路线：}
+
+
+
+
+
+\vspace{10cm} % 可选：调整间距
+\fullwidthrule
+
+
+\section{研究的总体安排与进度：}
+
+
+
+
+
+
+\newpage
+%\section{主要参考文献：}
+\makereferences %参考文献文件名main.bib
+
+\vspace{10cm} % 可选：调整间距
+\fullwidthrule
+
+%指导老师意见
+  \filbreak
+\section*{指导教师审核意见：}
+\vspace{1cm}
+{\zihao{-4}\songti 该开题报告选题具有一定的理论价值与实践意义，研究目标明确，研究内容充实，结构安排合理。研究方法选择恰当，研究计划基本可行，同意开题。希望在后续研究中，能进一步细化研究方案，并注意对可能遇到的难点做好预案，确保毕业设计顺利实施。} %指导老师实际意见
+\hrule height0pt
+\vfill
+\noindent\hfill
+\begin{minipage}{8cm}
+	\zihao{-4}\songti
+	\raggedleft
+	
+	%右下角签名和日期 教师的电子签名替换
+	%签名：\underline{\hspace{3cm}} \\[0.8em]
+	签名：\raisebox{-0.5cm}{\includegraphics[height=1.5cm]{教师电子签名.jpg}} \\[0.8em]
+	
+	%年\hspace{1cm}月\hspace{1cm}日
+	2025 年 12 月 31 日 %实际时间
+	
+	\vspace{0.5cm}
+\end{minipage}%
+\hspace*{1.5cm} % 调整右边距
+\vskip\npucorrect
+
+\end{document}

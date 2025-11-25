@@ -1,0 +1,179 @@
+\documentclass{wzu-kaitibaogao} % 不填充空白页。如果需要双面打印版，请注释掉本行并启用下一行
+
+\etitlefirst{}
+\etitlesecond{}
+
+% 论文中文标题
+\ctitle{基于卷积神经网络的手写数字及写字人识别}
+
+% 作者详细信息
+\cauthor{王\ 小\ 明}        % 作者姓名
+\studentid{12350004}       % 学号
+\cschool{计算机与人工智能学院}        % 学院
+\cclass{22级计算机1班}         %班级
+\cmajor{计算机科学与技术}    %专业
+\cyear{2026}               %毕业年份
+
+
+% 指导老师信息
+\cmentor{王大明 \ (教授)}
+
+%这四个在开题报告中空着
+\cabstract{}
+\ckeywords{}
+\eabstract{}
+\ekeywords{}
+
+\pagestyle{empty}
+
+\begin{document}
+% 论文前置部分
+\frontmatter
+\pagenumbering{Roman}
+\makeUndergraduateCover    % 生成封面
+
+
+% 论文主体部分
+\mainmatter
+% 正文
+%\clearpage
+
+\chapter*{关于XXXXX的文献综述}
+
+\section{研究背景、研究意义}
+
+
+注意事项：禁止将网页上的内容直接拷贝到本文档中，一方面会破坏论文模板格式（增加了很多额外的格式），另一方面网页中有很多非打印字符，在显示所有隐藏格式时，这些非打印字符一览无余，会被质疑该论文有抄袭嫌疑。一般的做法是先将网页内容拷贝到记事本文档，再从记事本文档拷贝过来，这样就能消除网页格式，再在此基础上进行修改。
+
+\textbf{综述注意事项：}。文献综述正文字数不少于2000汉字，对课题的研究背景意义，国内外研究现状及未来发展趋势描述规范、科学。文献要按顺序引用，文献列表中未被正文引用到的文献应该删除掉。一般文献不少于20篇(外文文献至少有5篇)，并且近五年文献不少于70\%。
+
+\section{国内外研究现状和分析}
+可以安装国内国外划分，也可以按照研究领域划分章节。
+\subsection{国外研究现状}
+国外研究现状与分析
+
+\subsection{国内研究现状}
+国内研究现状与分析
+
+\section{研究的发展趋势和展望}
+本课题的发展趋势和展望\\
+
+%%这里到参考文献之间是使用说明，写完后删掉
+\newpage 
+\section{\LaTeX 模板使用说明}
+\subsection{论文信息的输入和封面的自动生成}
+在开始使用本模板（main.tex文件）前，应该开头位置输入相应的论文相关信息，模板会根据信息自动生成目录和诚信承诺书。如图\ref{author}。
+\begin{figure}[htbp]
+        \centering
+        \includegraphics[height=6.54cm]{image/作者信息.png}
+        \caption{论文信息}
+        \label{author}
+\end{figure}
+
+\subsection{标题的使用}
+标题的使用可见图\ref{til}。其中，一级标题通过\textbackslash chapter\{\}。二级标题通过 \textbackslash section\{\}。三级标题通过\textbackslash subsection\{\}。
+\begin{figure}[htbp]
+        \centering
+        \includegraphics[width=0.65\linewidth]{image/标题使用.png}
+        \caption{标题使用}
+        \label{til}
+\end{figure}
+
+\subsection{表格的使用}
+表格的使用可以通过 \textbackslash table\{\}。详细说明如图\ref{tablea}所示。
+\begin{figure}[htbp]
+        \centering
+        \includegraphics[width=0.65\linewidth]{image/table.png}
+        \caption{表格使用}
+        \label{tablea}
+\end{figure}
+
+通过绘制我们可以得到表如表\ref{table}所示。
+\begin{table}[htbp]
+\centering
+\caption{表格的使用}
+\begin{tabular}{llll} 
+\arrayrulecolor{black}\hline
+字段名      & 类型   & 长度 & 备注    \\ 
+\arrayrulecolor{black}\hline
+Id       & int  & ~  & 自动增加  \\ 
+\hline
+UserName & Char & 50 & 用户名   \\
+\hline
+\end{tabular}
+\label{table}
+\end{table}
+
+\subsection{公式的使用}
+\begin{equation}
+    q+q = 2q
+    \label{gongshi}
+\end{equation}
+公式可通过 \textbackslash begin\{ equation \}使用，引用可通过\textbackslash label，具体操作下文会提及。
+
+\subsection{图片的插入和交叉引用}
+\subsubsection{图片的使用}
+图片的使用可通过\textbackslash begin\{figure\}实现，其中[htbp]可控制图片位置。见图\ref{pic}。
+\begin{figure}[htbp]
+        \centering
+        \includegraphics[width=0.65\linewidth]{image/figure.png}
+        \caption{图片使用}
+        \label{pic}
+\end{figure}
+
+\subsubsection{多图排版样例}
+本章节提供几个多图摆放的样例。
+\begin{figure}[htbp]
+\begin{minipage}[t]{0.48\linewidth}
+\centering
+\includegraphics[width=0.9\textwidth]{image/chap04/1.jpg}
+\caption{图1-1裂缝对照图}
+\label{fig:side:a}
+\end{minipage}%
+\begin{minipage}[t]{0.48\linewidth}
+\centering
+\includegraphics[width=0.9\textwidth]{image/chap04/2.jpg}  % 2.2in
+\caption{图1-2裂缝对照图}
+\label{fig:side:b}
+\end{minipage}
+\end{figure}
+
+
+\begin{figure}[!htp]
+	\centering
+	\subfloat[附件一中图1-2]{\includegraphics[width=0.4\textwidth]{image/chap04/2.jpg}}\qquad
+	\subfloat[附件一中图1-8]{\includegraphics[width=0.4\textwidth]{image/chap04/2.jpg}} \\
+	\caption{高斯模糊降噪后图像对比}
+    \label{cpm-1}
+\end{figure}
+
+\subsubsection{交叉引用}
+在\LaTeX 中，我们可以通过\textbackslash ref\{\}来对任何表格、图片、章节等进行引用。我们\textbackslash label 来对这些需要引用的命名，再在正文中通过 \textbackslash ref\{XX\}来进行引用。例如\ref{fig:side:a}，\ref{author}。但是这种方式不能自动识别图表公式，需要自行添加“图”。
+
+已定义自动引用格式，所有引用图片、公式、表格等内容均使用同一个命令`\textbackslash autoref\{\}`进行引用，该命令将会自动产生例如` 式``图 `等前置词语。例如\autoref{cpm-1}，\autoref{author}。
+
+
+\subsection{本地安装软件或者线上使用}
+
+网络查找tex编辑工具，例如按照https://zhuanlan.zhihu.com/p/1921310237857648721安装软件。安装完成后，编译文档需要使用 XeLaTeX 或 LuaLaTeX。例如，TexStudio中可以在，“选项”->“设置”->“构建”->“默认编辑器”中选择LuaLaTeX。
+
+可以直接使用第三方 LaTeX 线上编译平台模板库 [TeXPage](https://www.texpage.com/)，或者[Overleaf](https://www.overleaf.com/)在线使用。编译文档需要使用 XeLaTeX 或 LuaLaTeX。
+
+\section{参考文献说明}
+参考文献是毕业设计(论文)不可缺少的组成部分,它反映毕业设计(论文)的取材来源、材料的广博程度和材料的可靠程度,也是作者对他人知识成果的承认和尊重。一份完整的参考文献可向读者提供一份有价值的信息资料,列入的文献应在 20 篇以上(外文文献至少有5篇)，并且近五年文献不少于70\%。
+
+参考文献的著录方法采用我国国家标准GB7714-87《文后参考文献著录规则》中规定采用的“顺序编码制”，中外文混编。论文中，引用出处按引用先后顺序用阿拉伯数字和方括号“[]”放在引文结束处最后一个字的右上角作为对参考文献表相应条目的呼应。文后参考文献表中，各条文献按在论文中的文献序号顺序排列\overcite{杨蕴林2007,VoxResNet2018,郝远2023,同任2009}。
+
+参考文献引用，需按顺序引用，可利用交叉引用。其引用的文献，需采用上标字体，具体格式已在本文档做好，选中引用部分。例如，LeCun等\overcite{LeCun1998}提出卷积神经网络。
+
+参考文献均使用 bibtex 的形式记录在`main.bib'文件中，当需要引用时可使用`\textbackslash cite`和`\textbackslash overcite\`两个命令引用，前者为引用符号处于文本基线，后者为上标形式。会议论文用@inproceedings{}\overcite{Ngiam2010}，期刊论文用@article{}\overcite{LeCun1998}，书籍用@book{}\overcite{刘国钧1957}，学位论文用@mastersthesis{}\overcite{田露2011}、@phdthesis{}\overcite{田某2011}等。
+
+如果增加参考文献，可以在`main.bib`文件中增加，保存后使用bibtex
+编译文档。有时候，旧的辅助文件可能会干扰编译过程。你可以手动删除.aux、.bbl、.blg、.log等文件，然后重新编译你的文档\overcite{Multi2024,Dynamic2022,赵丽凤2025,卢凤达2024,付钧渤2025}。或者，直接到控制台找到对应路径后，使用“bibtex main”重新生成main.bbl文件\overcite{姜锡洲1989,汉语拼音正词法基本规则1996,谢希德1998,冯西桥1997,王明亮1998,Krizhevsky2012,Zeiler2010}。
+
+
+
+%参考文献(这个不能删除)
+\makereferences
+
+\end{document}

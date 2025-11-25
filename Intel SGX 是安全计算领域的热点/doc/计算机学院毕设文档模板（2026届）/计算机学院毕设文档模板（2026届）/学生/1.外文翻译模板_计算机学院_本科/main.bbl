@@ -1,0 +1,144 @@
+\begin{thebibliography}{21}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{#1}
+\expandafter\ifx\csname urlstyle\endcsname\relax\else
+  \urlstyle{same}\fi
+\expandafter\ifx\csname href\endcsname\relax
+  \DeclareUrlCommand\doi{\urlstyle{rm}}
+  \def\eprint#1#2{#2}
+\else
+  \def\doi#1{\href{https://doi.org/#1}{\nolinkurl{#1}}}
+  \let\eprint\href
+\fi
+
+\bibitem[LeCun et~al.(1998)LeCun, Bottou, Bengio, and et~al.]{LeCun1998}
+LECUN Y, BOTTOU L, BENGIO Y, et~al.
+\newblock Gradient-based learning applied to document
+  recognition\allowbreak[J].
+\newblock Proc. IEEE, 1998, 86\allowbreak (11): 2278-2324.
+
+\bibitem[刘国钧\ 等(1957)刘国钧, 陈绍业, and
+  王凤翥]{刘国钧1957}
+刘国钧, 陈绍业, 王凤翥.
+\newblock 图书馆目录\allowbreak[M].
+\newblock 高等教育出版社, 1957: 15-18.
+
+\bibitem[Ngiam et~al.(2010)Ngiam, Chen, Chia, and et~al.]{Ngiam2010}
+NGIAM J, CHEN Z, CHIA D, et~al.
+\newblock Tiled convolutional neural networks\allowbreak[C]//\allowbreak
+Advances in Neural Information Processing Systems.
+\newblock 2010: 1279-1287.
+
+\bibitem[田露(2011)]{田露2011}
+田露.
+\newblock
+  基于多特征数据融合的离线中文笔迹鉴别研究\allowbreak[D].
+\newblock 郑州: 河南大学, 2011.
+
+\bibitem[田某(2011)]{田某2011}
+田某.
+\newblock 基于多特征数据融合的模型研究\allowbreak[D].
+\newblock 郑州: 河南大学, 2011.
+
+\bibitem[杨蕴林\ 等(2007)杨蕴林, 赵小坚, and
+  苏娟华]{杨蕴林2007}
+杨蕴林, 赵小坚, 苏娟华.
+\newblock
+  顺序编码制参考文献序号在文中的标注位置\allowbreak[J].
+\newblock 中国科技期刊研究, 2007, 18\allowbreak (4): 2.
+
+\bibitem[Chen et~al.(2018)Chen, Dou, Yu, Qin, and Heng]{VoxResNet2018}
+CHEN H, DOU Q, YU L, et~al.
+\newblock Voxresnet: Deep voxelwise residual networks for brain segmentation
+  from 3d mr images - sciencedirect\allowbreak[J].
+\newblock NeuroImage, 2018, 170: 446-455.
+
+\bibitem[郝远(2023)]{郝远2023}
+郝远.
+\newblock
+  正文中同一处引用多篇参考文献时序号著录错误2例\allowbreak[J].
+\newblock 编辑学报, 2023, 35\allowbreak (2): 156-156.
+
+\bibitem[同任(2009)]{同任2009}
+同任.
+\newblock 参考文献序号在引文标注中的正确位置\allowbreak[J].
+\newblock 安徽理工大学学报：社会科学版, 2009, 11\allowbreak (3):
+  1.
+
+\bibitem[Phiphitphatphaisit et~al.(2024)Phiphitphatphaisit and
+  Surinta]{Multi2024}
+PHIPHITPHATPHAISIT S, SURINTA O.
+\newblock Multi-layer adaptive spatial-temporal feature fusion network for
+  efficient food image recognition\allowbreak[J].
+\newblock Expert Systems with Application, 2024, 255\allowbreak (Dec. Pt.D):
+  124834.1-124834.18.
+
+\bibitem[Zhang et~al.(2022)Zhang, Bao, Lu, Zhang, and Xun]{Dynamic2022}
+ZHANG H, BAO H, LU Y, et~al.
+\newblock Dynamic memory network with spatial-temporal feature fusion for
+  visual tracking\allowbreak[J].
+\newblock Journal of Electronic Imaging, 2022, 31\allowbreak (5): 26.
+
+\bibitem[赵丽凤\ 等(2025)赵丽凤, 谭秀利, 邢雪春, 董旭,
+  杨晓辉, 张立新, 宋现涛, 葛长江, and 王艳玲]{赵丽凤2025}
+赵丽凤, 谭秀利, 邢雪春, 等.
+\newblock
+  计算机化认知功能训练对心血管病合并轻度认知障碍患者焦虑抑郁的影响\allowbreak[J].
+\newblock 心肺血管病杂志, 2025, 44\allowbreak (1): 38-44.
+
+\bibitem[卢凤达\ 等(2024)卢凤达, 闫芸芸, 周靓, 郭义, and
+  周丹]{卢凤达2024}
+卢凤达, 闫芸芸, 周靓, 等.
+\newblock
+  轻度认知障碍的早期诊断及筛查方法研究现状\allowbreak[J].
+\newblock 中华老年医学杂志, 2024, 43\allowbreak (04): 528-533.
+
+\bibitem[付钧渤\ 等(2025)付钧渤, 赵国帅, and
+  钱学明]{付钧渤2025}
+付钧渤, 赵国帅, 钱学明.
+\newblock
+  基于大语言模型的知识库查询风格自适应转换\allowbreak[J].
+\newblock 计算机研究与发展, 2025, 62: 1-11.
+
+\bibitem[姜锡洲(1989)]{姜锡洲1989}
+姜锡洲.
+\newblock 一种温热外敷药制备方案: 881056073\allowbreak[P].
+\newblock 1989.
+
+\bibitem[规则团队(1996)]{汉语拼音正词法基本规则1996}
+规则团队.
+\newblock 汉语拼音正词法基本规则\allowbreak[S].
+\newblock 中国国家标准, 1996.
+
+\bibitem[谢希德(1998)]{谢希德1998}
+谢希德.
+\newblock 创造学习的新思路\allowbreak[J].
+\newblock 人民日报, 1998: 10.
+
+\bibitem[冯西桥(1997)]{冯西桥1997}
+冯西桥.
+\newblock 核反应堆压力管道和压力容器的LBB分析\allowbreak[Z].
+\newblock 清华大学核能技术设计研究院, 1997.
+
+\bibitem[王明亮(1998)]{王明亮1998}
+王明亮.
+\newblock
+  关于中国学术期刊标准化数据库系统工程的进展\allowbreak[EB/OL].
+\newblock 1998.
+\newblock \url{http://www.cajcd.edu.cn/pub/wml.txt/980810-2.html}.
+
+\bibitem[Krizhevsky et~al.(2012)Krizhevsky, Sutskever, and
+  Hinton]{Krizhevsky2012}
+KRIZHEVSKY A, SUTSKEVER I, HINTON G~E.
+\newblock Imagenet classification with deep convolutional neural
+  networks\allowbreak[C]//\allowbreak
+Advances in neural information processing systems.
+\newblock 2012: 1097-1105.
+
+\bibitem[Zeiler et~al.(2010)Zeiler, Krishnan, Taylor, and Fergus]{Zeiler2010}
+ZEILER M~D, KRISHNAN D, TAYLOR G~W, et~al.
+\newblock Deconvolutional networks\allowbreak[C]//\allowbreak
+Proc. CVPR.
+\newblock 2010: 2528-2535.
+
+\end{thebibliography}

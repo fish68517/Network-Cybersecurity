@@ -1,0 +1,233 @@
+\usepackage{xeCJK}
+\usepackage{calc}
+\usepackage[heading=true]{ctex}
+\usepackage{lipsum}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{geometry}
+\usepackage{fancybox}
+\usepackage{filecontents}
+
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{bbding}
+\usepackage{pifont}
+\usepackage{wasysym}
+\usepackage{amssymb}
+
+\usepackage[T1]{fontenc}
+
+\geometry{paperwidth=210mm,paperheight=297mm,left=2.5cm,right=2.5cm,top=2.54cm,bottom=2.54cm}
+
+\fancypage{%
+  \setlength{\fboxsep}{\npusep}%
+  \setlength{\shadowsize}{0pt}%
+  \shadowbox}{}
+
+\ifx\ctexset\undefined
+  \CTEXsetup[format={\zihao{4}\bfseries}]{section}
+  \CTEXsetup[format={\zihao{-4}\bfseries}]{subsection}
+\else
+  \ctexset{%
+    section={%
+      format={\zihao{4}\bfseries},
+      beforeskip=5pt,
+      afterskip=5pt,
+      name={,、},
+      aftername={\hspace{0pt}},
+      number={\chinese{section}}
+    }}
+  \ctexset{%
+    subsection={%
+      format={\zihao{-4}\bfseries},
+      beforeskip=5pt,
+      afterskip=0pt
+    }}
+  \ctexset{%
+    subsubsection={%
+      format={\zihao{-4}\bfseries},
+      beforeskip=3pt,
+      afterskip=0pt
+    }}
+\fi
+
+\let\npusection\section
+\def\npustarsection#1{\npusection{#1}}
+\def\section{\secdef\npusection\npustarsection}
+\def\cutrule{\noindent\hskip-\npusep\rule{\npuwidth}{0.4pt}}
+\def\npubreak{\noindent\hskip-\npusep\rule{\npuwidth}{0.4pt}}
+
+\newlength{\npusep}
+\newlength{\npuwidth}
+\newlength{\npucorrect}
+\newlength{\npucorrecttop}
+\setlength{\npusep}{10pt}
+\setlength{\npuwidth}{\textwidth}
+\addtolength{\npuwidth}{2\npusep}
+\setlength{\npucorrect}{5pt}
+\addtolength{\npucorrect}{-\npusep}
+\setlength{\npucorrecttop}{-10pt}
+\addtolength{\npucorrecttop}{-\npusep}
+\newlength{\npucone}
+\setlength{\npucone}{2cm}
+\newlength{\npuctwo}
+\setlength{\npuctwo}{\npuwidth}
+\addtolength{\npuctwo}{-\npucone}
+\newcommand\npuitem[2][3cm]{\parbox[c][#1][c]{\npucone}{\centering #2}}
+\newcommand\npusig[2][2.5cm]{\parbox[c][#1][c]{\npuctwo}{%
+  \vskip 0pt plus15fil \hskip2cm #2：
+  \hskip 0pt plus15fil 202\quad 年\quad 月\quad 日}}
+
+\newif\ifnpucheckbase\npucheckbasefalse
+\newif\ifnpucheckapply\npucheckapplyfalse
+\newif\ifnpucheckengine\npucheckenginefalse
+\newif\ifnpucheckoverall\npucheckoverallfalse
+\newif\ifnpucheckfirst\npucheckfirstfalse
+\newif\ifnpuchecksecond\npuchecksecondfalse
+\newif\ifnpucheckphd\npucheckphdfalse
+\newif\ifnpucheckms\npucheckmsfalse
+
+% 设置中文字体
+% \let\songti\relax
+% \let\heiti\relax
+% \let\fangsong\relax
+% \let\kaishu\relax
+%
+%\newCJKfontfamily\sonti{方正书宋简体}[BoldFont=方正粗宋简体]
+%\newCJKfontfamily\heiti{方正黑体简体}[BoldFont=方正正粗黑简体]
+%\newCJKfontfamily\fangsong{方正仿宋简体}
+%\newCJKfontfamily\kaishu{方正楷体简体}[BoldFont=方正粗楷简体]
+%
+%\setCJKmainfont{方正书宋简体}[BoldFont = 方正粗宋简体]
+%\setCJKsansfont{方正黑体简体}[BoldFont = 方正正粗黑简体]
+%\setCJKmonofont{方正仿宋简体}
+
+\setCJKfamilyfont{kaishu}[AutoFakeBold = {2.17}]{KaiTi}
+%\setCJKmainfont[AutoFakeBold,ItalicFont={楷体}]{楷体}
+\renewcommand*{\kaishu}{\CJKfamily{kaishu}}
+
+\newcommand{\fullwidthrule}{%
+
+   \noindent\makebox[\textwidth][c]{
+    \hspace{-\fboxsep}
+    \rule{\dimexpr\textwidth+6\fboxsep+\fboxrule\relax}{\fboxrule}
+    \hspace{-\fboxsep}
+  }
+}
+
+\newcommand\ctitle[1]{\def\@ctitle{#1}}
+\newcommand\cauthor[1]{\def\@cauthor{#1}}
+\newcommand\studentid[1]{\def\@studentid{#1}}
+\newcommand\cschool[1]{\def\@cschool{#1}}
+\newcommand\cclass[1]{\def\@cclass{#1}}
+\newcommand\cyear[1]{\def\@cyear{#1}}
+\newcommand\cmajor[1]{\def\@cmajor{#1}}
+\newcommand\cmentor[1]{\def\@cmentor{#1}}
+%\newcommand\cmentorcomments[1]{\def\@cmentorcomments{#1}}
+
+\usepackage{arydshln}
+\RequirePackage{setspace}
+\def\maketitlepage{
+  \thisfancypage{}{}
+  \begin{titlepage}
+     \centering
+
+    % 标题图片
+    \includegraphics[height=5.75cm]{title.png}
+
+    \vspace{1em}
+
+    % 主标题
+    {\zihao{1}\songti\bfseries  毕\hspace{0.1em}业\hspace{0.1em}设\hspace{0.1em}计\hspace{0.5em}(论文)}  \\
+    \vspace{1em}
+    {\zihao{1}\songti\bfseries 开\hspace{0.5em}题\hspace{0.5em}报\hspace{0.5em}告}
+
+    \vspace{2cm}
+
+    % 信息表格（关键：不要在 spacing 中嵌套 tabular）
+    \zihao{4} \kaishu
+    % \setstretch{1} % 手动设置行距，避免 spacing 环境干扰 tabular
+    \renewcommand{\arraystretch}{1.5} % 调整表格行高
+	\begin{tabular}{clcl}
+		% [s] 两端对齐
+		\makebox[2cm][s]{题 \qquad 目：} & \multicolumn{3}{c}{\makebox[9.5cm]{\hfill \@ctitle\hfill}} \\ 
+		\cline{2-4}\\
+		\makebox[2cm][s]{学 \qquad 院：} &  \makebox[5cm]{\hfill\@cschool\hfill}    &
+		\makebox[2cm][s]{专 \qquad 业：} &  \makebox[4.5cm]{\hfill\@cmajor\hfill}     \\ 
+		\cline{2-2}\cline{4-4}  \\            
+		\makebox[2cm][s]{班 \qquad 级：} &  \makebox[5cm]{\hfill\@cclass\hfill}     & 
+		\makebox[2cm][s]{学 \qquad 号：} & \makebox[4.5cm]{\hfill\@studentid\hfill}   \\ \cline{2-2}\cline{4-4} \\
+		\makebox[2cm][s]{姓 \qquad 名：} &  \makebox[5cm]{\hfill\@cauthor\hfill}    &
+		\makebox[2cm][s]{指导教师：} & \makebox[4.5cm]{\hfill\@cmentor\hfill}         \\ \cline{2-2}\cline{4-4} 
+	\end{tabular}
+
+    \vfill
+
+    % 底部文字
+    {\zihao{3}温州大学教务处制}
+  \end{titlepage}
+  \clearpage}
+
+
+
+\newcommand\overcite[1]{{\setcitestyle{super}\cite{#1}}}
+  
+\def\maketail{
+
+}
+
+\usepackage{tikz}
+\usepackage{eso-pic} % 用于添加背景层内容
+
+\AtBeginDocument{
+  \maketitlepage % 生成封面页
+   % 添加一个背景层，用来放置图片
+  \AddToShipoutPictureBG*{%
+    \begin{tikzpicture}[remember picture, overlay]
+      % 计算页面中心位置
+      \node at (10.7,27.6){%
+        \includegraphics[height=0.75cm]{bb.png}%
+      };
+    \end{tikzpicture}%
+  }
+  
+}
+
+
+
+\AtEndDocument{\maketail}
+\renewcommand{\normalsize}{\zihao{5}}
+\pagestyle{plain}
+
+\newtheorem{theorem}{定理}
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{corollary}[theorem]{推论}
+\newtheorem{proposition}[theorem]{命题}
+\newtheorem{definition}[theorem]{定义}
+
+
+\newcommand\makereferences{
+    \begingroup
+    % 引用样式
+    \renewcommand{\refname}{}  % 用于 article 类
+    \bibliographystyle{gbt7714-numerical}
+    \section{主要参考文献：}
+    
+    % 设置字体和行距
+    \zihao{-4}\songti
+    \linespread{1.5}\selectfont
+    
+    % 重置间距
+    \setlength{\itemsep}{0pt}
+    \setlength{\parskip}{0pt}
+    \setlength{\parsep}{0pt}
+    \setlength{\partopsep}{0pt}
+    
+    % 关键：向上移动一行，抵消默认空行
+    \vspace{-\baselineskip}
+    
+    % 输出参考文献
+    \bibliography{reference}
+    \endgroup
+}
