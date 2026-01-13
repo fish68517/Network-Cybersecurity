@@ -1,0 +1,15 @@
+# Visual Studio 所有版本 必忽略的缓存文件
+.vs/
+bin/
+obj/
+x64/
+x86/
+# 编译生成的exe、dll可执行文件
+*.exe
+*.dll
+*.pdb
+*.suo
+*.user
+*.cache
+*.ilk
+*.log
