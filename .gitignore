@@ -1,0 +1,66 @@
+# ===================== 系统/编辑器相关 =====================
+# Visual Studio 配置文件夹
+.vs/
+# Android Studio/IntelliJ 配置文件夹
+.idea/
+# 本地gradle缓存
+.gradle/
+# 本地SDK路径配置（Android）
+local.properties
+# Mac系统隐藏文件
+.DS_Store
+# Visual Studio 解决方案相关临时文件
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+# IntelliJ/Android Studio 模块文件
+*.iml
+
+# ===================== 构建输出/编译产物 =====================
+# Android 模块构建目录
+app/build/
+# 所有目录下的build目录（通用）
+*/build/
+# 输出目录
+out/
+bin/
+obj/
+
+# ===================== 大文件/压缩包（应对GitHub 100M限制） =====================
+# 压缩包后缀（常见大文件载体）
+*.rar
+*.zip
+*.7z
+*.tar.gz
+*.gz
+*.bz2
+*.iso
+*.dmg
+# 安卓打包后的APK（如果是调试/发布包，通常超过100M则忽略，按需调整）
+*.apk
+*.apks
+*.aab
+# 其他大文件后缀
+*.mp4
+*.mov
+*.avi
+*.flv
+*.wav
+*.mp3
+*.iso
+*.img
+
+# ===================== 项目特定忽略（截图里的文件/文件夹） =====================
+# 交付文件夹（通常包含打包/交付用的大文件）
+交付/
+# 本地SDK路径文本文件（无需提交）
+sdk路径.txt
+# 项目压缩包（截图里的MedicalSystemDemo.rar）
+MedicalSystemDemo.rar
+
+# ===================== 可选：Git LFS 相关（如果需要追踪大文件，需配合git lfs） =====================
+# 如果需要用Git LFS管理部分大文件，可取消注释并配置git lfs
+# 例如：
+# *.apk filter=lfs diff=lfs merge=lfs -text
+# *.rar filter=lfs diff=lfs merge=lfs -text

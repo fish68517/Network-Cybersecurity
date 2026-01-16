@@ -1,0 +1,13 @@
+enclave {
+    from "sgx_tstdc.edl" import *;
+
+    trusted {
+        /* 定义一个公开的 ECall，用于接收病历 */
+        public void ecall_secure_save_record([in, string] const char* name, [in, string] const char* diagnosis);
+    };
+
+    untrusted {
+        /* 定义一个 OCall，用于把结果打印出来 */
+        void ocall_print_log([in, string] const char* str);
+    };
+};

@@ -1,0 +1,9 @@
+﻿  Generate enclave test key
+  MedicalSystemDemo.cpp
+  MedicalSystemDemo_t.c
+    正在创建库 D:\Acode\Android\complete\MedicalSystemDemo\MedicalSystemDemo\x64\Debug\MedicalSystemDemo.lib 和对象 D:\Acode\Android\complete\MedicalSystemDemo\MedicalSystemDemo\x64\Debug\MedicalSystemDemo.exp
+  MedicalSystemDemo.vcxproj -> D:\Acode\Android\complete\MedicalSystemDemo\MedicalSystemDemo\x64\Debug\MedicalSystemDemo.dll
+  sign the enclave
+  系统找不到指定的路径。
+E:\Program Files (x86)\Microsoft\visualStudio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppCommon.targets(155,5): error MSB3073: 命令“"D:\Software\SGX_SDK\bin\x64\release\sgx_sign.exe" sign -key "D:\Acode\Android\complete\MedicalSystemDemo\MedicalSystemDemo\MedicalSystemDemo_private.pem" -enclave "D:\Acode\Android\complete\MedicalSystemDemo\MedicalSystemDemo\x64\Debug\MedicalSystemDemo.dll" -out "D:\Acode\Android\complete\MedicalSystemDemo\MedicalSystemDemo\x64\Debug\MedicalSystemDemo.signed.dll" -config "D:\Acode\Android\complete\MedicalSystemDemo\MedicalSystemDemo\MedicalSystemDemo.config.xml"
+E:\Program Files (x86)\Microsoft\visualStudio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppCommon.targets(155,5): error MSB3073: :VCEnd”已退出，代码为 3。

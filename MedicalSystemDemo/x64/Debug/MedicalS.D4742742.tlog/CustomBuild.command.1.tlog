@@ -1,0 +1,2 @@
+^D:\ACODE\ANDROID\COMPLETE\MEDICALSYSTEMDEMO\MEDICALSYSTEMDEMO\MEDICALSYSTEMDEMO.EDL
+"D:\Software\SGX_SDK\bin\win32\release\sgx_edger8r.exe" --trusted "D:\Acode\Android\complete\MedicalSystemDemo\MedicalSystemDemo\MedicalSystemDemo.edl" --search-path "D:\Software\SGX_SDK\include"

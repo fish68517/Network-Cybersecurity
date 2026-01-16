@@ -1,0 +1,97 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.36631.11
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MedicalSystemDemo", "MedicalSystemDemo.vcxproj", "{D4742742-D70A-4AB1-8663-FCE43061EDA6}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MedicalSystemDemo_app", "..\MedicalSystemDemo_app\MedicalSystemDemo_app.vcxproj", "{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		CVE-2020-0551-CF-Prerelease|x64 = CVE-2020-0551-CF-Prerelease|x64
+		CVE-2020-0551-CF-Prerelease|x86 = CVE-2020-0551-CF-Prerelease|x86
+		CVE-2020-0551-CF-Release|x64 = CVE-2020-0551-CF-Release|x64
+		CVE-2020-0551-CF-Release|x86 = CVE-2020-0551-CF-Release|x86
+		CVE-2020-0551-Load-Prerelease|x64 = CVE-2020-0551-Load-Prerelease|x64
+		CVE-2020-0551-Load-Prerelease|x86 = CVE-2020-0551-Load-Prerelease|x86
+		CVE-2020-0551-Load-Release|x64 = CVE-2020-0551-Load-Release|x64
+		CVE-2020-0551-Load-Release|x86 = CVE-2020-0551-Load-Release|x86
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Prerelease|x64 = Prerelease|x64
+		Prerelease|x86 = Prerelease|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+		Simulation|x64 = Simulation|x64
+		Simulation|x86 = Simulation|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D4742742-D70A-4AB1-8663-FCE43061EDA6}.CVE-2020-0551-CF-Prerelease|x64.ActiveCfg = CVE-2020-0551-CF-Prerelease|x64
+		{D4742742-D70A-4AB1-8663-FCE43061EDA6}.CVE-2020-0551-CF-Prerelease|x64.Build.0 = CVE-2020-0551-CF-Prerelease|x64
+		{D4742742-D70A-4AB1-8663-FCE43061EDA6}.CVE-2020-0551-CF-Prerelease|x86.ActiveCfg = CVE-2020-0551-CF-Prerelease|x64
+		{D4742742-D70A-4AB1-8663-FCE43061EDA6}.CVE-2020-0551-CF-Release|x64.ActiveCfg = CVE-2020-0551-CF-Release|x64
+		{D4742742-D70A-4AB1-8663-FCE43061EDA6}.CVE-2020-0551-CF-Release|x64.Build.0 = CVE-2020-0551-CF-Release|x64
+		{D4742742-D70A-4AB1-8663-FCE43061EDA6}.CVE-2020-0551-CF-Release|x86.ActiveCfg = CVE-2020-0551-CF-Release|x64
+		{D4742742-D70A-4AB1-8663-FCE43061EDA6}.CVE-2020-0551-Load-Prerelease|x64.ActiveCfg = CVE-2020-0551-Load-Prerelease|x64
+		{D4742742-D70A-4AB1-8663-FCE43061EDA6}.CVE-2020-0551-Load-Prerelease|x64.Build.0 = CVE-2020-0551-Load-Prerelease|x64
+		{D4742742-D70A-4AB1-8663-FCE43061EDA6}.CVE-2020-0551-Load-Prerelease|x86.ActiveCfg = CVE-2020-0551-Load-Prerelease|x64
+		{D4742742-D70A-4AB1-8663-FCE43061EDA6}.CVE-2020-0551-Load-Release|x64.ActiveCfg = CVE-2020-0551-Load-Release|x64
+		{D4742742-D70A-4AB1-8663-FCE43061EDA6}.CVE-2020-0551-Load-Release|x64.Build.0 = CVE-2020-0551-Load-Release|x64
+		{D4742742-D70A-4AB1-8663-FCE43061EDA6}.CVE-2020-0551-Load-Release|x86.ActiveCfg = CVE-2020-0551-Load-Release|x64
+		{D4742742-D70A-4AB1-8663-FCE43061EDA6}.Debug|x64.ActiveCfg = Debug|x64
+		{D4742742-D70A-4AB1-8663-FCE43061EDA6}.Debug|x64.Build.0 = Debug|x64
+		{D4742742-D70A-4AB1-8663-FCE43061EDA6}.Debug|x86.ActiveCfg = Debug|Win32
+		{D4742742-D70A-4AB1-8663-FCE43061EDA6}.Debug|x86.Build.0 = Debug|Win32
+		{D4742742-D70A-4AB1-8663-FCE43061EDA6}.Prerelease|x64.ActiveCfg = Prerelease|x64
+		{D4742742-D70A-4AB1-8663-FCE43061EDA6}.Prerelease|x64.Build.0 = Prerelease|x64
+		{D4742742-D70A-4AB1-8663-FCE43061EDA6}.Prerelease|x86.ActiveCfg = Prerelease|Win32
+		{D4742742-D70A-4AB1-8663-FCE43061EDA6}.Prerelease|x86.Build.0 = Prerelease|Win32
+		{D4742742-D70A-4AB1-8663-FCE43061EDA6}.Release|x64.ActiveCfg = Release|x64
+		{D4742742-D70A-4AB1-8663-FCE43061EDA6}.Release|x64.Build.0 = Release|x64
+		{D4742742-D70A-4AB1-8663-FCE43061EDA6}.Release|x86.ActiveCfg = Release|Win32
+		{D4742742-D70A-4AB1-8663-FCE43061EDA6}.Release|x86.Build.0 = Release|Win32
+		{D4742742-D70A-4AB1-8663-FCE43061EDA6}.Simulation|x64.ActiveCfg = Simulation|x64
+		{D4742742-D70A-4AB1-8663-FCE43061EDA6}.Simulation|x64.Build.0 = Simulation|x64
+		{D4742742-D70A-4AB1-8663-FCE43061EDA6}.Simulation|x86.ActiveCfg = Simulation|Win32
+		{D4742742-D70A-4AB1-8663-FCE43061EDA6}.Simulation|x86.Build.0 = Simulation|Win32
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.CVE-2020-0551-CF-Prerelease|x64.ActiveCfg = Debug|x64
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.CVE-2020-0551-CF-Prerelease|x64.Build.0 = Debug|x64
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.CVE-2020-0551-CF-Prerelease|x86.ActiveCfg = Debug|Win32
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.CVE-2020-0551-CF-Prerelease|x86.Build.0 = Debug|Win32
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.CVE-2020-0551-CF-Release|x64.ActiveCfg = Release|x64
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.CVE-2020-0551-CF-Release|x64.Build.0 = Release|x64
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.CVE-2020-0551-CF-Release|x86.ActiveCfg = Release|Win32
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.CVE-2020-0551-CF-Release|x86.Build.0 = Release|Win32
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.CVE-2020-0551-Load-Prerelease|x64.ActiveCfg = Debug|x64
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.CVE-2020-0551-Load-Prerelease|x64.Build.0 = Debug|x64
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.CVE-2020-0551-Load-Prerelease|x86.ActiveCfg = Debug|Win32
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.CVE-2020-0551-Load-Prerelease|x86.Build.0 = Debug|Win32
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.CVE-2020-0551-Load-Release|x64.ActiveCfg = Release|x64
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.CVE-2020-0551-Load-Release|x64.Build.0 = Release|x64
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.CVE-2020-0551-Load-Release|x86.ActiveCfg = Release|Win32
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.CVE-2020-0551-Load-Release|x86.Build.0 = Release|Win32
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.Debug|x64.ActiveCfg = Debug|x64
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.Debug|x64.Build.0 = Debug|x64
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.Debug|x86.ActiveCfg = Debug|Win32
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.Debug|x86.Build.0 = Debug|Win32
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.Prerelease|x64.ActiveCfg = Debug|x64
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.Prerelease|x64.Build.0 = Debug|x64
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.Prerelease|x86.ActiveCfg = Debug|Win32
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.Prerelease|x86.Build.0 = Debug|Win32
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.Release|x64.ActiveCfg = Release|x64
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.Release|x64.Build.0 = Release|x64
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.Release|x86.ActiveCfg = Release|Win32
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.Release|x86.Build.0 = Release|Win32
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.Simulation|x64.ActiveCfg = Debug|x64
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.Simulation|x64.Build.0 = Debug|x64
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.Simulation|x86.ActiveCfg = Debug|Win32
+		{C9A926F6-9CD6-4612-A7C4-2F1B907A417D}.Simulation|x86.Build.0 = Debug|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DEEF2789-2443-4263-8355-DEE14E082E09}
+	EndGlobalSection
+EndGlobal
