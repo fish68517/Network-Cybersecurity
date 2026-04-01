@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-04-01T00:00:00.000Z" agent="Codex" version="24.7.17">
+  <diagram id="diagram-1" name="&#31995;&#32479;&#24635;&#20307;&#26550;&#26500;">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="v1" value="&#25511;&#21046;&#21488;&#23487;&#20027;&#31243;&#24207;
+MedicalSystemDemo_app.cpp" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;" vertex="1" parent="1"><mxGeometry x="60" y="220" width="220" height="80" as="geometry"/></mxCell>
+        <mxCell id="v2" value="EDL &#26725;&#25509;&#23618;
+MedicalSystemDemo.edl
+MedicalSystemDemo_u/t" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;" vertex="1" parent="1"><mxGeometry x="340" y="220" width="220" height="80" as="geometry"/></mxCell>
+        <mxCell id="v3" value="Enclave &#19994;&#21153;&#23618;
+MedicalSystemDemo.cpp" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;" vertex="1" parent="1"><mxGeometry x="620" y="220" width="220" height="80" as="geometry"/></mxCell>
+        <mxCell id="v4" value="&#20869;&#23384;&#24577;&#31995;&#32479;&#29366;&#24577;
+MsdSystemState" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;" vertex="1" parent="1"><mxGeometry x="900" y="120" width="220" height="80" as="geometry"/></mxCell>
+        <mxCell id="v5" value="&#26435;&#38480;&#19982;&#20250;&#35805;&#25511;&#21046;
+current_user / has_role" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;" vertex="1" parent="1"><mxGeometry x="900" y="220" width="220" height="80" as="geometry"/></mxCell>
+        <mxCell id="v6" value="&#24739;&#32773;&#26723;&#26696;&#19982;&#30149;&#21382;&#25968;&#32452;
+users / patients / records" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;" vertex="1" parent="1"><mxGeometry x="900" y="320" width="220" height="80" as="geometry"/></mxCell>
+        <mxCell id="v7" value="OCall &#22806;&#37096;&#26381;&#21153;
+&#25171;&#21360;&#26085;&#24535; / &#25991;&#20214;&#35835;&#20889; / &#33719;&#21462;&#26102;&#38388;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;" vertex="1" parent="1"><mxGeometry x="620" y="420" width="220" height="80" as="geometry"/></mxCell>
+        <mxCell id="v8" value="&#23494;&#23553;&#29366;&#24577;&#25991;&#20214;
+sealed_system_state.bin" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=14;" vertex="1" parent="1"><mxGeometry x="900" y="420" width="220" height="80" as="geometry"/></mxCell>
+        <mxCell id="e1" value="ECall" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" edge="1" parent="1" source="v1" target="v2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" value="&#21463;&#20449;&#25509;&#21475;" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" edge="1" parent="1" source="v2" target="v3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" value="&#32500;&#25252;" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" edge="1" parent="1" source="v3" target="v4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" value="&#25191;&#34892;" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" edge="1" parent="1" source="v3" target="v5"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" value="&#35835;&#20889;" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" edge="1" parent="1" source="v3" target="v6"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" value="OCall" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" edge="1" parent="1" source="v3" target="v7"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e7" value="&#20445;&#23384;/&#35835;&#21462;" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" edge="1" parent="1" source="v7" target="v8"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

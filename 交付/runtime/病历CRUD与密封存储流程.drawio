@@ -1,0 +1,85 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.6.1 Chrome/142.0.7444.265 Electron/39.8.0 Safari/537.36" version="29.6.1">
+  <diagram id="diagram-1" name="病历CRUD与密封存储流程">
+    <mxGraphModel dx="1489" dy="894" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="v1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;" value="开始" vertex="1">
+          <mxGeometry height="50" width="120" x="80" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="v2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;" value="医生发起新增/修改/删除病历" vertex="1">
+          <mxGeometry height="60" width="240" x="50" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="v3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;" value="ecall_create_record 或 ecall_update_record 或 ecall_delete_record" vertex="1">
+          <mxGeometry height="90" width="260" x="40" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="v4" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=14;" value="当前用户是否医生？" vertex="1">
+          <mxGeometry height="80" width="160" x="90" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="v5" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=14;" value="患者档案/病历是否存在？" vertex="1">
+          <mxGeometry height="80" width="180" x="300" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="v6" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=14;" value="若为修改或删除 是否为病历创建医生？" vertex="1">
+          <mxGeometry height="80" width="200" x="490" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="v7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;" value="新增：分配 record_id 写入 doctor_username 和 created_at" vertex="1">
+          <mxGeometry height="80" width="230" x="760" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="v8" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;" value="修改：覆盖 diagnosis / prescription / note" vertex="1">
+          <mxGeometry height="70" width="230" x="750" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="v9" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;" value="删除：memset 清空记录槽位" vertex="1">
+          <mxGeometry height="60" width="230" x="660" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="v10" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=14;" value="宿主侧 flush_state 密封并写入 sealed_system_state.bin" vertex="1">
+          <mxGeometry height="90" width="240" x="1070" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="v11" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=14;" value="返回错误码" vertex="1">
+          <mxGeometry height="70" width="160" x="360" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="v1" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" target="v2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="v2" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" target="v3" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="v3" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" target="v4" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="v4" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" target="v11" value="否">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="v4" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" target="v5" value="是">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="v5" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" target="v11" value="否">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="v5" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" target="v6" value="是">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="v6" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" target="v11" value="否">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="v6" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" target="v7" value="新增">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="1" source="v6" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" target="v8" value="修改">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="1" source="v6" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" target="v9" value="删除">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" edge="1" parent="1" source="v7" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" target="v10" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" edge="1" parent="1" source="v8" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" target="v10" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" edge="1" parent="1" source="v9" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" target="v10" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

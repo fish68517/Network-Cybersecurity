@@ -1,0 +1,19 @@
+==================================================
+   基于 Intel SGX 的密态病历信息系统 - 第一阶段原型
+==================================================
+
+[App] Enclave 初始化成功，ID: 2
+[App] 已从密态状态文件读取: D:\Acode\Android\complete\MedicalSystemDemo\交付\runtime\MedicalSystemDemo_Portable_x64\sealed_system_state.bin
+
+[Enclave-Log] [Enclave] 系统状态加载成功。当前记录号起点: 2
+[App] 已从密态文件恢复系统状态。
+-------------------------------------------
+[访客菜单]
+1. 初始化系统
+2. 加载系统状态
+3. 登录
+0. 退出程序
+请选择: [App] 密态状态文件已保存到: D:\Acode\Android\complete\MedicalSystemDemo\交付\runtime\MedicalSystemDemo_Portable_x64\sealed_system_state.bin
+
+[Enclave-Log] [Enclave] 系统状态已密封并请求写入文件: sealed_system_state.bin
+[App] 程序结束。

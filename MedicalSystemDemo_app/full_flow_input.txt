@@ -1,0 +1,53 @@
+1
+3
+admin
+admin123
+1
+patient1
+pat123
+2
+doctor1
+doc123
+4
+patient1
+Alice Patient
+ID123456
+13800000000
+Hangzhou
+3
+6
+9
+3
+doctor1
+doc123
+1
+2
+patient1
+4
+patient1
+Flu Stage 1
+Rest and Water
+First visit
+3
+patient1
+5
+1
+Flu Stage 2
+Medicine A
+Follow-up
+3
+patient1
+8
+3
+admin
+admin123
+7
+patient1
+9
+3
+patient1
+pat123
+1
+3
+5
+0

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-04-01T00:00:00.000Z" agent="Codex" version="24.7.17">
+  <diagram id="diagram-1" name="&#24739;&#32773;&#26723;&#26696;CRUD&#27969;&#31243;">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="v1" value="&#24320;&#22987;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;" vertex="1" parent="1"><mxGeometry x="80" y="40" width="120" height="50" as="geometry"/></mxCell>
+        <mxCell id="v2" value="&#31649;&#29702;&#21592;/&#24739;&#32773;&#21457;&#36215;&#26723;&#26696;&#26032;&#22686;&#25110;&#20462;&#25913;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;" vertex="1" parent="1"><mxGeometry x="50" y="120" width="240" height="60" as="geometry"/></mxCell>
+        <mxCell id="v3" value="ecall_upsert_patient_profile" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;" vertex="1" parent="1"><mxGeometry x="70" y="220" width="200" height="60" as="geometry"/></mxCell>
+        <mxCell id="v4" value="&#36755;&#20837;&#26159;&#21542;&#21512;&#27861;&#65311;" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=14;" vertex="1" parent="1"><mxGeometry x="90" y="320" width="160" height="80" as="geometry"/></mxCell>
+        <mxCell id="v5" value="&#23545;&#24212;&#24739;&#32773;&#36134;&#21495;&#26159;&#21542;&#23384;&#22312;&#65311;" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=14;" vertex="1" parent="1"><mxGeometry x="320" y="320" width="180" height="80" as="geometry"/></mxCell>
+        <mxCell id="v6" value="&#26159;&#21542;&#26377;&#32534;&#36753;&#26435;&#38480;&#65311;
+&#31649;&#29702;&#21592;&#25110;&#26412;&#20154;" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=14;" vertex="1" parent="1"><mxGeometry x="560" y="320" width="180" height="80" as="geometry"/></mxCell>
+        <mxCell id="v7" value="&#26597;&#25214;&#26723;&#26696;&#27133;&#20301;
+find_patient_index" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;" vertex="1" parent="1"><mxGeometry x="800" y="320" width="180" height="60" as="geometry"/></mxCell>
+        <mxCell id="v8" value="&#19981;&#23384;&#22312;&#21017;&#20998;&#37197;&#26032;&#27133;&#20301;
+allocate_patient_slot" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;" vertex="1" parent="1"><mxGeometry x="790" y="430" width="200" height="70" as="geometry"/></mxCell>
+        <mxCell id="v9" value="&#20889;&#20837; full_name / id_card / phone / address" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;" vertex="1" parent="1"><mxGeometry x="780" y="540" width="220" height="70" as="geometry"/></mxCell>
+        <mxCell id="v10" value="&#23487;&#20027;&#20391; flush_state
+&#35302;&#21457;&#23494;&#23553;&#20445;&#23384;" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=14;" vertex="1" parent="1"><mxGeometry x="790" y="660" width="200" height="60" as="geometry"/></mxCell>
+        <mxCell id="v11" value="&#36820;&#22238;&#38169;&#35823;&#30721;" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=14;" vertex="1" parent="1"><mxGeometry x="360" y="540" width="160" height="70" as="geometry"/></mxCell>
+        <mxCell id="e1" value="" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" edge="1" parent="1" source="v1" target="v2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" value="" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" edge="1" parent="1" source="v2" target="v3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" value="" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" edge="1" parent="1" source="v3" target="v4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" value="&#21542;" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" edge="1" parent="1" source="v4" target="v11"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" value="&#26159;" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" edge="1" parent="1" source="v4" target="v5"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" value="&#21542;" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" edge="1" parent="1" source="v5" target="v11"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e7" value="&#26159;" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" edge="1" parent="1" source="v5" target="v6"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e8" value="&#21542;" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" edge="1" parent="1" source="v6" target="v11"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e9" value="&#26159;" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" edge="1" parent="1" source="v6" target="v7"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e10" value="" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" edge="1" parent="1" source="v7" target="v8"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e11" value="" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" edge="1" parent="1" source="v8" target="v9"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e12" value="" style="endArrow=block;html=1;rounded=1;strokeWidth=1.5;" edge="1" parent="1" source="v9" target="v10"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

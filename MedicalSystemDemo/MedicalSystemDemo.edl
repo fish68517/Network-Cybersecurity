@@ -1,13 +1,43 @@
-enclave {
+锘縠nclave {
     from "sgx_tstdc.edl" import *;
 
     trusted {
-        /* 定义一个公开的 ECall，用于接收病历 */
-        public void ecall_secure_save_record([in, string] const char* name, [in, string] const char* diagnosis);
+        public void ecall_system_init([out] int* result);
+        public void ecall_system_load([out] int* result);
+        public void ecall_system_flush([out] int* result);
+
+        public void ecall_register_user([in, string] const char* username, [in, string] const char* password, int role, [out] int* result);
+        public void ecall_login_user([in, string] const char* username, [in, string] const char* password, [out] int* role, [out] int* result);
+        public void ecall_logout_user([out] int* result);
+        public void ecall_list_users([out, size=buffer_size] char* buffer, size_t buffer_size, [out] int* result);
+
+        public void ecall_upsert_patient_profile(
+            [in, string] const char* patient_username,
+            [in, string] const char* full_name,
+            [in, string] const char* id_card,
+            [in, string] const char* phone,
+            [in, string] const char* address,
+            [out] int* result);
+        public void ecall_get_patient_profile([in, string] const char* patient_username, [out, size=buffer_size] char* buffer, size_t buffer_size, [out] int* result);
+        public void ecall_list_patients([out, size=buffer_size] char* buffer, size_t buffer_size, [out] int* result);
+        public void ecall_delete_patient_profile([in, string] const char* patient_username, [out] int* result);
+
+        public void ecall_create_record(
+            [in, string] const char* patient_username,
+            [in, string] const char* diagnosis,
+            [in, string] const char* prescription,
+            [in, string] const char* note,
+            [out] int* record_id,
+            [out] int* result);
+        public void ecall_list_records([in, string] const char* patient_username, [out, size=buffer_size] char* buffer, size_t buffer_size, [out] int* result);
+        public void ecall_update_record(int record_id, [in, string] const char* diagnosis, [in, string] const char* prescription, [in, string] const char* note, [out] int* result);
+        public void ecall_delete_record(int record_id, [out] int* result);
     };
 
     untrusted {
-        /* 定义一个 OCall，用于把结果打印出来 */
         void ocall_print_log([in, string] const char* str);
+        void ocall_save_blob([in, string] const char* file_name, [in, size=data_size] const uint8_t* data, size_t data_size, [out] int* result);
+        void ocall_load_blob([in, string] const char* file_name, [out, size=max_size] uint8_t* data, size_t max_size, [out] size_t* actual_size, [out] int* result);
+        void ocall_get_time([out, size=buffer_size] char* buffer, size_t buffer_size);
     };
 };

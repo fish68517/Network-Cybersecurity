@@ -18,6 +18,18 @@ extern "C" {
 #define OCALL_PRINT_LOG_DEFINED__
 void SGX_UBRIDGE(SGX_NOCONVENTION, ocall_print_log, (const char* str));
 #endif
+#ifndef OCALL_SAVE_BLOB_DEFINED__
+#define OCALL_SAVE_BLOB_DEFINED__
+void SGX_UBRIDGE(SGX_NOCONVENTION, ocall_save_blob, (const char* file_name, const uint8_t* data, size_t data_size, int* result));
+#endif
+#ifndef OCALL_LOAD_BLOB_DEFINED__
+#define OCALL_LOAD_BLOB_DEFINED__
+void SGX_UBRIDGE(SGX_NOCONVENTION, ocall_load_blob, (const char* file_name, uint8_t* data, size_t max_size, size_t* actual_size, int* result));
+#endif
+#ifndef OCALL_GET_TIME_DEFINED__
+#define OCALL_GET_TIME_DEFINED__
+void SGX_UBRIDGE(SGX_NOCONVENTION, ocall_get_time, (char* buffer, size_t buffer_size));
+#endif
 #ifndef SGX_OC_CPUIDEX_DEFINED__
 #define SGX_OC_CPUIDEX_DEFINED__
 void SGX_UBRIDGE(SGX_CDECL, sgx_oc_cpuidex, (int cpuinfo[4], int leaf, int subleaf));
@@ -39,7 +51,21 @@ int SGX_UBRIDGE(SGX_CDECL, sgx_thread_setwait_untrusted_events_ocall, (const voi
 int SGX_UBRIDGE(SGX_CDECL, sgx_thread_set_multiple_untrusted_events_ocall, (const void** waiters, size_t total));
 #endif
 
-sgx_status_t ecall_secure_save_record(sgx_enclave_id_t eid, const char* name, const char* diagnosis);
+sgx_status_t ecall_system_init(sgx_enclave_id_t eid, int* result);
+sgx_status_t ecall_system_load(sgx_enclave_id_t eid, int* result);
+sgx_status_t ecall_system_flush(sgx_enclave_id_t eid, int* result);
+sgx_status_t ecall_register_user(sgx_enclave_id_t eid, const char* username, const char* password, int role, int* result);
+sgx_status_t ecall_login_user(sgx_enclave_id_t eid, const char* username, const char* password, int* role, int* result);
+sgx_status_t ecall_logout_user(sgx_enclave_id_t eid, int* result);
+sgx_status_t ecall_list_users(sgx_enclave_id_t eid, char* buffer, size_t buffer_size, int* result);
+sgx_status_t ecall_upsert_patient_profile(sgx_enclave_id_t eid, const char* patient_username, const char* full_name, const char* id_card, const char* phone, const char* address, int* result);
+sgx_status_t ecall_get_patient_profile(sgx_enclave_id_t eid, const char* patient_username, char* buffer, size_t buffer_size, int* result);
+sgx_status_t ecall_list_patients(sgx_enclave_id_t eid, char* buffer, size_t buffer_size, int* result);
+sgx_status_t ecall_delete_patient_profile(sgx_enclave_id_t eid, const char* patient_username, int* result);
+sgx_status_t ecall_create_record(sgx_enclave_id_t eid, const char* patient_username, const char* diagnosis, const char* prescription, const char* note, int* record_id, int* result);
+sgx_status_t ecall_list_records(sgx_enclave_id_t eid, const char* patient_username, char* buffer, size_t buffer_size, int* result);
+sgx_status_t ecall_update_record(sgx_enclave_id_t eid, int record_id, const char* diagnosis, const char* prescription, const char* note, int* result);
+sgx_status_t ecall_delete_record(sgx_enclave_id_t eid, int record_id, int* result);
 
 #ifdef __cplusplus
 }

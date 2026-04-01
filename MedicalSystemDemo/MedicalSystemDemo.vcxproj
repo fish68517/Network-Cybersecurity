@@ -287,7 +287,7 @@
       <Message>Generate enclave test key</Message>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>"$(SGXSDKInstallPath)bin\x64\release\sgx_sign.exe" sign -key "$(ProjectDir)MedicalSystemDemo_private.pem" -enclave "$(OutDir)MedicalSystemDemo.dll" -out "$(OutDir)MedicalSystemDemo.signed.dll" -config "$(ProjectDir)MedicalSystemDemo.config.xml"</Command>
+      <Command>"$(SGXSDKInstallPath)build\native\bin\win32\Release\sgx_sign.exe" sign -key "$(ProjectDir)MedicalSystemDemo_private.pem" -enclave "$(OutDir)MedicalSystemDemo.dll" -out "$(OutDir)MedicalSystemDemo.signed.dll" -config "$(ProjectDir)MedicalSystemDemo.config.xml"</Command>
       <Message>sign the enclave</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -337,7 +337,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
     <PostBuildEvent>
-      <Command>"$(SGXSDKInstallPath)bin\x64\release\sgx_sign.exe" gendata -enclave "$(OutDir)MedicalSystemDemo.dll" -out "$(OutDir)MedicalSystemDemo.hex" -config "$(ProjectDir)MedicalSystemDemo.config.xml"</Command>
+      <Command>"$(SGXSDKInstallPath)build\native\bin\win32\Release\sgx_sign.exe" gendata -enclave "$(OutDir)MedicalSystemDemo.dll" -out "$(OutDir)MedicalSystemDemo.hex" -config "$(ProjectDir)MedicalSystemDemo.config.xml"</Command>
       <Message>generate the enclave signing material</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -361,7 +361,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
     <PostBuildEvent>
-      <Command>"$(SGXSDKInstallPath)bin\x64\release\sgx_sign.exe" gendata -enclave "$(OutDir)MedicalSystemDemo.dll" -out "$(OutDir)MedicalSystemDemo.hex" -config "$(ProjectDir)MedicalSystemDemo.config.xml"</Command>
+      <Command>"$(SGXSDKInstallPath)build\native\bin\win32\Release\sgx_sign.exe" gendata -enclave "$(OutDir)MedicalSystemDemo.dll" -out "$(OutDir)MedicalSystemDemo.hex" -config "$(ProjectDir)MedicalSystemDemo.config.xml"</Command>
       <Message>generate the enclave signing material</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -385,7 +385,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
     <PostBuildEvent>
-      <Command>"$(SGXSDKInstallPath)bin\x64\release\sgx_sign.exe" gendata -enclave "$(OutDir)MedicalSystemDemo.dll" -out "$(OutDir)MedicalSystemDemo.hex" -config "$(ProjectDir)MedicalSystemDemo.config.xml"</Command>
+      <Command>"$(SGXSDKInstallPath)build\native\bin\win32\Release\sgx_sign.exe" gendata -enclave "$(OutDir)MedicalSystemDemo.dll" -out "$(OutDir)MedicalSystemDemo.hex" -config "$(ProjectDir)MedicalSystemDemo.config.xml"</Command>
       <Message>generate the enclave signing material</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -413,7 +413,7 @@
       <Message>Generate enclave test key</Message>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>"$(SGXSDKInstallPath)bin\x64\release\sgx_sign.exe" sign -key "$(ProjectDir)MedicalSystemDemo_private.pem" -enclave "$(OutDir)MedicalSystemDemo.dll" -out "$(OutDir)MedicalSystemDemo.signed.dll" -config "$(ProjectDir)MedicalSystemDemo.config.xml"</Command>
+      <Command>"$(SGXSDKInstallPath)build\native\bin\win32\Release\sgx_sign.exe" sign -key "$(ProjectDir)MedicalSystemDemo_private.pem" -enclave "$(OutDir)MedicalSystemDemo.dll" -out "$(OutDir)MedicalSystemDemo.signed.dll" -config "$(ProjectDir)MedicalSystemDemo.config.xml"</Command>
       <Message>sign the enclave</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -441,7 +441,7 @@
       <Message>Generate enclave test key</Message>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>"$(SGXSDKInstallPath)bin\x64\release\sgx_sign.exe" sign -key "$(ProjectDir)MedicalSystemDemo_private.pem" -enclave "$(OutDir)MedicalSystemDemo.dll" -out "$(OutDir)MedicalSystemDemo.signed.dll" -config "$(ProjectDir)MedicalSystemDemo.config.xml"</Command>
+      <Command>"$(SGXSDKInstallPath)build\native\bin\win32\Release\sgx_sign.exe" sign -key "$(ProjectDir)MedicalSystemDemo_private.pem" -enclave "$(OutDir)MedicalSystemDemo.dll" -out "$(OutDir)MedicalSystemDemo.signed.dll" -config "$(ProjectDir)MedicalSystemDemo.config.xml"</Command>
       <Message>sign the enclave</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -469,7 +469,7 @@
       <Message>Generate enclave test key</Message>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>"$(SGXSDKInstallPath)bin\x64\release\sgx_sign.exe" sign -key "$(ProjectDir)MedicalSystemDemo_private.pem" -enclave "$(OutDir)MedicalSystemDemo.dll" -out "$(OutDir)MedicalSystemDemo.signed.dll" -config "$(ProjectDir)MedicalSystemDemo.config.xml"</Command>
+      <Command>"$(SGXSDKInstallPath)build\native\bin\win32\Release\sgx_sign.exe" sign -key "$(ProjectDir)MedicalSystemDemo_private.pem" -enclave "$(OutDir)MedicalSystemDemo.dll" -out "$(OutDir)MedicalSystemDemo.signed.dll" -config "$(ProjectDir)MedicalSystemDemo.config.xml"</Command>
       <Message>sign the enclave</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>

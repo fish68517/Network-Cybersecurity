@@ -2,10 +2,10 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>D:\Acode\Android\complete\MedicalSystemDemo\MedicalSystemDemo\x64\Simulation\MedicalSystemDemo.dll</FullPath>
+      <FullPath>D:\Acode\Android\complete\MedicalSystemDemo\MedicalSystemDemo\x64\Debug\MedicalSystemDemo.dll</FullPath>
     </ProjectOutput>
     <ProjectOutput>
-      <FullPath>D:\Acode\Android\complete\MedicalSystemDemo\MedicalSystemDemo\x64\Debug\MedicalSystemDemo_app.exe</FullPath>
+      <FullPath>D:\Acode\Android\complete\MedicalSystemDemo\MedicalSystemDemo_app\x64\Debug\MedicalSystemDemo_app.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />
