@@ -12,6 +12,8 @@
 namespace {
 
 MsdSystemState g_state;
+MsdRaSessionState g_ra_state;
+uint32_t g_ra_next_session_id = 1;
 
 size_t safe_strlen_limit(const char* text, size_t limit)
 {
@@ -37,6 +39,8 @@ bool text_empty(const char* text)
     return text == NULL || text[0] == '\0';
 }
 
+void write_result(int* result, int code);
+
 void copy_text(char* destination, size_t destination_size, const char* source)
 {
     if (destination == NULL || destination_size == 0) {
@@ -51,6 +55,12 @@ void copy_text(char* destination, size_t destination_size, const char* source)
     snprintf(destination, destination_size, "%s", source);
 }
 
+void reset_ra_state()
+{
+    memset(&g_ra_state, 0, sizeof(g_ra_state));
+    g_ra_state.status = MSD_RA_NOT_STARTED;
+}
+
 void clear_state()
 {
     memset(&g_state, 0, sizeof(g_state));
@@ -58,11 +68,13 @@ void clear_state()
     g_state.version = MSD_STATE_VERSION;
     g_state.next_record_id = 1;
     g_state.active_session_index = -1;
+    reset_ra_state();
 }
 
 void reset_session()
 {
     g_state.active_session_index = -1;
+    reset_ra_state();
 }
 
 const char* role_to_text(int role)
@@ -82,6 +94,30 @@ const char* role_to_text(int role)
 bool valid_role(int role)
 {
     return role == MSD_ROLE_ADMIN || role == MSD_ROLE_DOCTOR || role == MSD_ROLE_PATIENT;
+}
+
+const char* ra_status_to_text(int status)
+{
+    switch (status) {
+    case MSD_RA_NOT_STARTED:
+        return "未开始";
+    case MSD_RA_CONTEXT_READY:
+        return "上下文已初始化";
+    case MSD_RA_MSG1_READY:
+        return "Msg1 已生成";
+    case MSD_RA_WAITING_MSG2:
+        return "等待 Msg2";
+    case MSD_RA_MSG3_READY:
+        return "Msg3 已生成";
+    case MSD_RA_WAITING_RESULT:
+        return "等待认证结果";
+    case MSD_RA_VERIFIED:
+        return "认证通过";
+    case MSD_RA_FAILED:
+        return "认证失败";
+    default:
+        return "未知状态";
+    }
 }
 
 void enclave_log(const char* format, ...)
@@ -250,6 +286,82 @@ bool patient_has_records(const char* username)
         }
     }
     return false;
+}
+
+bool secure_channel_ready()
+{
+    return g_ra_state.status == MSD_RA_VERIFIED && g_ra_state.secure_channel_ready != 0;
+}
+
+bool attested_channel_required_for_user(const MsdUserAccount* user)
+{
+    return user != NULL && (user->role == MSD_ROLE_DOCTOR || user->role == MSD_ROLE_PATIENT);
+}
+
+bool ensure_attested_channel_for_user(int* result)
+{
+    MsdUserAccount* user = current_user();
+    if (!attested_channel_required_for_user(user)) {
+        return true;
+    }
+
+    if (secure_channel_ready()) {
+        return true;
+    }
+
+    enclave_log("[Enclave-RA] 用户 %s 执行敏感操作前尚未完成远程认证。", user->username);
+    write_result(result, MSD_ERR_RA_REQUIRED);
+    return false;
+}
+
+bool build_ra_message(
+    uint32_t message_type,
+    const char* payload_text,
+    uint8_t* buffer,
+    size_t buffer_size,
+    size_t* actual_size)
+{
+    if (actual_size != NULL) {
+        *actual_size = 0;
+    }
+
+    if (buffer == NULL || actual_size == NULL) {
+        return false;
+    }
+
+    const char* payload = payload_text != NULL ? payload_text : "";
+    const uint32_t payload_size = (uint32_t)safe_strlen_limit(payload, MSD_RA_MAX_MESSAGE_SIZE);
+    const size_t total_size = sizeof(uint32_t) * 2 + payload_size;
+    if (total_size > buffer_size) {
+        return false;
+    }
+
+    memcpy(buffer, &message_type, sizeof(uint32_t));
+    memcpy(buffer + sizeof(uint32_t), &payload_size, sizeof(uint32_t));
+    if (payload_size > 0) {
+        memcpy(buffer + sizeof(uint32_t) * 2, payload, payload_size);
+    }
+
+    *actual_size = total_size;
+    return true;
+}
+
+bool attestation_result_is_success(const uint8_t* data, size_t data_size)
+{
+    if (data == NULL || data_size == 0) {
+        return false;
+    }
+
+    if (data_size == 1 && data[0] == 1) {
+        return true;
+    }
+
+    char text[32] = { 0 };
+    size_t copy_size = data_size < sizeof(text) - 1 ? data_size : sizeof(text) - 1;
+    memcpy(text, data, copy_size);
+    text[copy_size] = '\0';
+
+    return strcmp(text, "OK") == 0 || strcmp(text, "TRUSTED") == 0;
 }
 
 int create_default_admin()
@@ -436,6 +548,182 @@ void ecall_system_flush(int* result)
     write_result(result, flush_state_internal());
 }
 
+void ecall_ra_init_context(const char* peer_identity, int* result)
+{
+    if (!g_state.initialized) {
+        write_result(result, MSD_ERR_NOT_INITIALIZED);
+        return;
+    }
+
+    if (!has_active_session()) {
+        write_result(result, MSD_ERR_NO_PERMISSION);
+        return;
+    }
+
+    if (!validate_common_string(peer_identity, MSD_RA_MAX_IDENTITY)) {
+        write_result(result, MSD_ERR_INVALID_INPUT);
+        return;
+    }
+
+    reset_ra_state();
+    g_ra_state.status = MSD_RA_CONTEXT_READY;
+    g_ra_state.session_id = g_ra_next_session_id++;
+    copy_text(g_ra_state.peer_identity, sizeof(g_ra_state.peer_identity), peer_identity);
+
+    enclave_log("[Enclave-RA] 远程认证上下文已创建，会话ID: %u，对端: %s", g_ra_state.session_id, g_ra_state.peer_identity);
+    write_result(result, MSD_OK);
+}
+
+void ecall_ra_get_msg1(uint8_t* buffer, size_t buffer_size, size_t* actual_size, int* result)
+{
+    if (actual_size != NULL) {
+        *actual_size = 0;
+    }
+
+    if (!g_state.initialized) {
+        write_result(result, MSD_ERR_NOT_INITIALIZED);
+        return;
+    }
+
+    if (!has_active_session()) {
+        write_result(result, MSD_ERR_NO_PERMISSION);
+        return;
+    }
+
+    if (buffer == NULL || actual_size == NULL || buffer_size < sizeof(uint32_t) * 2) {
+        write_result(result, MSD_ERR_INVALID_INPUT);
+        return;
+    }
+
+    if (g_ra_state.status != MSD_RA_CONTEXT_READY) {
+        write_result(result, MSD_ERR_RA_CONTEXT_NOT_READY);
+        return;
+    }
+
+    char payload[256] = { 0 };
+    MsdUserAccount* user = current_user();
+    snprintf(payload,
+        sizeof(payload),
+        "MSD_RA_MSG1_PLACEHOLDER|session=%u|user=%s|peer=%s",
+        g_ra_state.session_id,
+        user != NULL ? user->username : "unknown",
+        g_ra_state.peer_identity);
+
+    if (!build_ra_message(MSD_RA_MSG1, payload, buffer, buffer_size, actual_size)) {
+        write_result(result, MSD_ERR_BUFFER_TOO_SMALL);
+        return;
+    }
+
+    g_ra_state.status = MSD_RA_WAITING_MSG2;
+    g_ra_state.last_message_type = MSD_RA_MSG1;
+    enclave_log("[Enclave-RA] 已生成 Msg1，占位远程认证流程已启动。");
+    write_result(result, MSD_OK);
+}
+
+void ecall_ra_proc_msg2_get_msg3(const uint8_t* msg2, size_t msg2_size, uint8_t* buffer, size_t buffer_size, size_t* actual_size, int* result)
+{
+    if (actual_size != NULL) {
+        *actual_size = 0;
+    }
+
+    if (!g_state.initialized) {
+        write_result(result, MSD_ERR_NOT_INITIALIZED);
+        return;
+    }
+
+    if (!has_active_session()) {
+        write_result(result, MSD_ERR_NO_PERMISSION);
+        return;
+    }
+
+    if (msg2 == NULL || msg2_size == 0 || msg2_size > MSD_RA_MAX_MESSAGE_SIZE || buffer == NULL || actual_size == NULL) {
+        write_result(result, MSD_ERR_RA_MSG_INVALID);
+        return;
+    }
+
+    if (g_ra_state.status != MSD_RA_WAITING_MSG2) {
+        write_result(result, MSD_ERR_RA_CONTEXT_NOT_READY);
+        return;
+    }
+
+    char payload[256] = { 0 };
+    snprintf(payload,
+        sizeof(payload),
+        "MSD_RA_MSG3_PLACEHOLDER|session=%u|peer=%s|msg2_size=%u",
+        g_ra_state.session_id,
+        g_ra_state.peer_identity,
+        (unsigned int)msg2_size);
+
+    if (!build_ra_message(MSD_RA_MSG3, payload, buffer, buffer_size, actual_size)) {
+        write_result(result, MSD_ERR_BUFFER_TOO_SMALL);
+        return;
+    }
+
+    g_ra_state.status = MSD_RA_WAITING_RESULT;
+    g_ra_state.last_message_type = MSD_RA_MSG3;
+    enclave_log("[Enclave-RA] 已处理 Msg2，并生成 Msg3。");
+    write_result(result, MSD_OK);
+}
+
+void ecall_ra_finalize(const uint8_t* attestation_result, size_t attestation_size, int* result)
+{
+    if (!g_state.initialized) {
+        write_result(result, MSD_ERR_NOT_INITIALIZED);
+        return;
+    }
+
+    if (!has_active_session()) {
+        write_result(result, MSD_ERR_NO_PERMISSION);
+        return;
+    }
+
+    if (attestation_result == NULL || attestation_size == 0) {
+        write_result(result, MSD_ERR_RA_MSG_INVALID);
+        return;
+    }
+
+    if (g_ra_state.status != MSD_RA_WAITING_RESULT) {
+        write_result(result, MSD_ERR_RA_CONTEXT_NOT_READY);
+        return;
+    }
+
+    if (!attestation_result_is_success(attestation_result, attestation_size)) {
+        g_ra_state.status = MSD_RA_FAILED;
+        g_ra_state.secure_channel_ready = 0;
+        enclave_log("[Enclave-RA] 远程认证结果为失败。");
+        write_result(result, MSD_ERR_RA_VERIFY_FAILED);
+        return;
+    }
+
+    g_ra_state.status = MSD_RA_VERIFIED;
+    g_ra_state.secure_channel_ready = 1;
+    g_ra_state.last_message_type = MSD_RA_ATT_RESULT;
+    g_ra_state.session_key_size = MSD_RA_SESSION_KEY_SIZE;
+    for (uint32_t index = 0; index < MSD_RA_SESSION_KEY_SIZE; ++index) {
+        g_ra_state.session_key[index] = static_cast<uint8_t>((g_ra_state.session_id + index * 13u) & 0xFFu);
+    }
+    enclave_log("[Enclave-RA] 远程认证通过，已建立占位安全会话并派生会话密钥。");
+    write_result(result, MSD_OK);
+}
+
+void ecall_ra_get_status(int* ra_status, int* secure_channel_flag, int* result)
+{
+    if (ra_status != NULL) {
+        *ra_status = g_ra_state.status;
+    }
+    if (secure_channel_flag != NULL) {
+        *secure_channel_flag = g_ra_state.secure_channel_ready;
+    }
+
+    if (!g_state.initialized) {
+        write_result(result, MSD_ERR_NOT_INITIALIZED);
+        return;
+    }
+
+    enclave_log("[Enclave-RA] 当前认证状态: %s", ra_status_to_text(g_ra_state.status));
+    write_result(result, MSD_OK);
+}
+
 void ecall_register_user(const char* username, const char* password, int role, int* result)
 {
     if (!g_state.initialized) {
@@ -597,6 +885,10 @@ void ecall_upsert_patient_profile(const char* patient_username, const char* full
         return;
     }
 
+    if (!ensure_attested_channel_for_user(result)) {
+        return;
+    }
+
     int patient_index = find_patient_index(patient_username);
     if (patient_index < 0) {
         patient_index = allocate_patient_slot();
@@ -635,6 +927,10 @@ void ecall_get_patient_profile(const char* patient_username, char* buffer, size_
 
     if (!can_view_patient(patient_username)) {
         write_result(result, MSD_ERR_NO_PERMISSION);
+        return;
+    }
+
+    if (!ensure_attested_channel_for_user(result)) {
         return;
     }
 
@@ -679,6 +975,10 @@ void ecall_list_patients(char* buffer, size_t buffer_size, int* result)
 
     size_t offset = 0;
     if (user->role == MSD_ROLE_PATIENT) {
+        if (!ensure_attested_channel_for_user(result)) {
+            return;
+        }
+
         int patient_index = find_patient_index(user->username);
         if (patient_index < 0) {
             write_result(result, MSD_ERR_PROFILE_NOT_FOUND);
@@ -696,6 +996,10 @@ void ecall_list_patients(char* buffer, size_t buffer_size, int* result)
 
     if (user->role != MSD_ROLE_ADMIN && user->role != MSD_ROLE_DOCTOR) {
         write_result(result, MSD_ERR_NO_PERMISSION);
+        return;
+    }
+
+    if (!ensure_attested_channel_for_user(result)) {
         return;
     }
 
@@ -760,6 +1064,10 @@ void ecall_create_record(const char* patient_username, const char* diagnosis, co
     MsdUserAccount* user = current_user();
     if (user == NULL || user->role != MSD_ROLE_DOCTOR) {
         write_result(result, MSD_ERR_NO_PERMISSION);
+        return;
+    }
+
+    if (!ensure_attested_channel_for_user(result)) {
         return;
     }
 
@@ -830,6 +1138,10 @@ void ecall_list_records(const char* patient_username, char* buffer, size_t buffe
         return;
     }
 
+    if (!ensure_attested_channel_for_user(result)) {
+        return;
+    }
+
     if (!patient_profile_exists(patient_username)) {
         write_result(result, MSD_ERR_PROFILE_NOT_FOUND);
         return;
@@ -873,6 +1185,10 @@ void ecall_update_record(int record_id, const char* diagnosis, const char* presc
         return;
     }
 
+    if (!ensure_attested_channel_for_user(result)) {
+        return;
+    }
+
     if (!validate_common_string(diagnosis, MSD_MAX_DIAGNOSIS)
         || !validate_common_string(prescription, MSD_MAX_PRESCRIPTION)
         || !validate_common_string(note, MSD_MAX_NOTE)) {
@@ -909,6 +1225,10 @@ void ecall_delete_record(int record_id, int* result)
     MsdUserAccount* user = current_user();
     if (user == NULL || user->role != MSD_ROLE_DOCTOR) {
         write_result(result, MSD_ERR_NO_PERMISSION);
+        return;
+    }
+
+    if (!ensure_attested_channel_for_user(result)) {
         return;
     }
 

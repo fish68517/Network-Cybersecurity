@@ -1,0 +1,1 @@
+D:\Acode\Android\complete\MedicalSystemDemo\gui\bridge\x64\Release\sgx_gui_bridge.dll

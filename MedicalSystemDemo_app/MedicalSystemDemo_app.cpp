@@ -2,9 +2,11 @@
 #include <tchar.h>
 
 #include <ctime>
+#include <cstring>
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <vector>
 #include <windows.h>
 #include <stdio.h>
 
@@ -62,6 +64,11 @@ std::wstring get_storage_file_path(const char* file_name)
     return get_executable_directory() + L"\\" + to_wstring_ascii(file_name);
 }
 
+std::wstring get_service_provider_path()
+{
+    return get_executable_directory() + L"\\RemoteAttestation_sp.exe";
+}
+
 string wide_to_console_text(const std::wstring& text)
 {
     if (text.empty()) {
@@ -77,6 +84,150 @@ string wide_to_console_text(const std::wstring& text)
     string result(static_cast<size_t>(required_size - 1), '\0');
     WideCharToMultiByte(code_page, 0, text.c_str(), -1, &result[0], required_size, NULL, NULL);
     return result;
+}
+
+bool file_exists(const std::wstring& path)
+{
+    const DWORD attributes = GetFileAttributesW(path.c_str());
+    return attributes != INVALID_FILE_ATTRIBUTES && (attributes & FILE_ATTRIBUTE_DIRECTORY) == 0;
+}
+
+bool write_binary_file(const std::wstring& path, const uint8_t* data, size_t size)
+{
+    FILE* file = NULL;
+    _wfopen_s(&file, path.c_str(), L"wb");
+    if (file == NULL) {
+        return false;
+    }
+
+    const size_t bytes_written = size > 0 ? fwrite(data, 1, size, file) : 0;
+    fclose(file);
+    return size == 0 || bytes_written == size;
+}
+
+bool read_binary_file(const std::wstring& path, vector<uint8_t>& data)
+{
+    data.clear();
+
+    FILE* file = NULL;
+    _wfopen_s(&file, path.c_str(), L"rb");
+    if (file == NULL) {
+        return false;
+    }
+
+    _fseeki64(file, 0, SEEK_END);
+    const __int64 file_size = _ftelli64(file);
+    _fseeki64(file, 0, SEEK_SET);
+    if (file_size < 0 || static_cast<size_t>(file_size) > sizeof(uint32_t) * 2 + MSD_RA_MAX_MESSAGE_SIZE) {
+        fclose(file);
+        return false;
+    }
+
+    data.assign(static_cast<size_t>(file_size), 0);
+    const size_t bytes_read = file_size > 0 ? fread(&data[0], 1, static_cast<size_t>(file_size), file) : 0;
+    fclose(file);
+    return static_cast<size_t>(file_size) == bytes_read;
+}
+
+bool decode_ra_message(const uint8_t* raw, size_t raw_size, uint32_t& message_type, const uint8_t*& payload, size_t& payload_size)
+{
+    message_type = MSD_RA_MSG_NONE;
+    payload = NULL;
+    payload_size = 0;
+
+    if (raw == NULL || raw_size < sizeof(uint32_t) * 2) {
+        return false;
+    }
+
+    uint32_t encoded_type = 0;
+    uint32_t encoded_size = 0;
+    memcpy(&encoded_type, raw, sizeof(uint32_t));
+    memcpy(&encoded_size, raw + sizeof(uint32_t), sizeof(uint32_t));
+    if (encoded_size > MSD_RA_MAX_MESSAGE_SIZE || raw_size < sizeof(uint32_t) * 2 + encoded_size) {
+        return false;
+    }
+
+    message_type = encoded_type;
+    payload = raw + sizeof(uint32_t) * 2;
+    payload_size = encoded_size;
+    return true;
+}
+
+bool invoke_service_provider(const uint8_t* request, size_t request_size, vector<uint8_t>& response, string& error_text)
+{
+    response.clear();
+    error_text.clear();
+
+    const std::wstring provider_path = get_service_provider_path();
+    if (!file_exists(provider_path)) {
+        error_text = "未找到 RemoteAttestation_sp.exe: " + wide_to_console_text(provider_path);
+        return false;
+    }
+
+    const DWORD process_id = GetCurrentProcessId();
+    const std::wstring base_dir = get_executable_directory();
+    const std::wstring request_path = base_dir + L"\\ra_request_" + to_wstring(process_id) + L".bin";
+    const std::wstring response_path = base_dir + L"\\ra_response_" + to_wstring(process_id) + L".bin";
+    DeleteFileW(request_path.c_str());
+    DeleteFileW(response_path.c_str());
+
+    if (!write_binary_file(request_path, request, request_size)) {
+        error_text = "写入远程认证请求文件失败: " + wide_to_console_text(request_path);
+        return false;
+    }
+
+    cout << "[App-RA] 调用 service_provider: " << wide_to_console_text(provider_path) << endl;
+    cout << "[App-RA] 请求文件: " << wide_to_console_text(request_path) << endl;
+    cout << "[App-RA] 响应文件: " << wide_to_console_text(response_path) << endl;
+
+    std::wstring command_line = L"\"" + provider_path + L"\" \"" + request_path + L"\" \"" + response_path + L"\"";
+    vector<wchar_t> command_buffer(command_line.begin(), command_line.end());
+    command_buffer.push_back(L'\0');
+
+    STARTUPINFOW startup_info = {};
+    startup_info.cb = sizeof(startup_info);
+    PROCESS_INFORMATION process_info = {};
+
+    BOOL created = CreateProcessW(
+        NULL,
+        &command_buffer[0],
+        NULL,
+        NULL,
+        FALSE,
+        CREATE_NO_WINDOW,
+        NULL,
+        base_dir.c_str(),
+        &startup_info,
+        &process_info);
+    if (!created) {
+        DeleteFileW(request_path.c_str());
+        error_text = "启动 RemoteAttestation_sp.exe 失败";
+        return false;
+    }
+
+    WaitForSingleObject(process_info.hProcess, 15000);
+    DWORD exit_code = 0;
+    GetExitCodeProcess(process_info.hProcess, &exit_code);
+    CloseHandle(process_info.hThread);
+    CloseHandle(process_info.hProcess);
+
+    if (exit_code != 0) {
+        DeleteFileW(request_path.c_str());
+        DeleteFileW(response_path.c_str());
+        error_text = "RemoteAttestation_sp.exe 执行失败，退出码: " + to_string(exit_code);
+        return false;
+    }
+
+    if (!read_binary_file(response_path, response)) {
+        DeleteFileW(request_path.c_str());
+        DeleteFileW(response_path.c_str());
+        error_text = "读取远程认证响应文件失败: " + wide_to_console_text(response_path);
+        return false;
+    }
+
+    DeleteFileW(request_path.c_str());
+    DeleteFileW(response_path.c_str());
+    return true;
 }
 
 const char* sgx_status_to_text(sgx_status_t status)
@@ -154,8 +305,46 @@ const char* result_to_text(int result)
         return "已有用户处于登录状态";
     case MSD_ERR_PROFILE_HAS_RECORDS:
         return "患者仍有关联病历，不能删除档案";
+    case MSD_ERR_RA_REQUIRED:
+        return "当前操作需要先完成远程认证";
+    case MSD_ERR_RA_CONTEXT_NOT_READY:
+        return "远程认证上下文尚未准备好";
+    case MSD_ERR_RA_BUSY:
+        return "远程认证流程正在进行中";
+    case MSD_ERR_RA_VERIFY_FAILED:
+        return "远程认证验证失败";
+    case MSD_ERR_SECURE_CHANNEL_NOT_READY:
+        return "安全会话尚未建立";
+    case MSD_ERR_RA_MSG_INVALID:
+        return "远程认证消息无效";
+    case MSD_ERR_RA_UNSUPPORTED:
+        return "当前环境暂不支持完整远程认证";
     default:
         return "内部错误";
+    }
+}
+
+const char* ra_status_to_text(int status)
+{
+    switch (status) {
+    case MSD_RA_NOT_STARTED:
+        return "未开始";
+    case MSD_RA_CONTEXT_READY:
+        return "上下文已初始化";
+    case MSD_RA_MSG1_READY:
+        return "Msg1 已生成";
+    case MSD_RA_WAITING_MSG2:
+        return "等待 Msg2";
+    case MSD_RA_MSG3_READY:
+        return "Msg3 已生成";
+    case MSD_RA_WAITING_RESULT:
+        return "等待认证结果";
+    case MSD_RA_VERIFIED:
+        return "认证通过";
+    case MSD_RA_FAILED:
+        return "认证失败";
+    default:
+        return "未知状态";
     }
 }
 
@@ -191,6 +380,11 @@ void print_separator()
 void print_operation(const char* title, int result)
 {
     cout << "[App] " << title << ": " << result_to_text(result) << endl;
+}
+
+void print_ra_operation(const char* title, int result)
+{
+    cout << "[App-RA] " << title << ": " << result_to_text(result) << endl;
 }
 
 bool flush_state(bool verbose)
@@ -318,6 +512,152 @@ void ocall_get_time(char* buffer, size_t buffer_size)
     tm local_tm;
     localtime_s(&local_tm, &now);
     strftime(buffer, buffer_size, "%Y-%m-%d %H:%M:%S", &local_tm);
+}
+
+void ocall_ra_send_msg(uint32_t message_type, const uint8_t* data, size_t data_size, int* result)
+{
+    if (result != NULL) {
+        *result = MSD_OK;
+    }
+
+    printf("[App-RA] 占位发送消息，类型: %u，大小: %u 字节\n", message_type, (unsigned int)data_size);
+    if (data != NULL && data_size > 0) {
+        printf("[App-RA] 当前阶段仅记录消息，不做真实网络发送。\n");
+    }
+}
+
+void ocall_ra_recv_msg(uint32_t expected_message_type, uint8_t* buffer, size_t buffer_size, size_t* actual_size, int* result)
+{
+    if (actual_size != NULL) {
+        *actual_size = 0;
+    }
+    if (result != NULL) {
+        *result = MSD_ERR_RA_UNSUPPORTED;
+    }
+
+    if (buffer != NULL && buffer_size > 0) {
+        buffer[0] = 0;
+    }
+
+    printf("[App-RA] 请求接收消息，期望类型: %u。当前尚未接入真实 service_provider。\n", expected_message_type);
+}
+
+void show_remote_attestation_status()
+{
+    int ra_status = MSD_RA_NOT_STARTED;
+    int secure_channel_ready = 0;
+    int result = MSD_OK;
+    sgx_status_t status = ecall_ra_get_status(global_eid, &ra_status, &secure_channel_ready, &result);
+    if (!check_sgx_status(status, "查看远程认证状态")) {
+        return;
+    }
+
+    print_ra_operation("查看远程认证状态", result);
+    if (result == MSD_OK) {
+        cout << "[App-RA] 认证状态: " << ra_status_to_text(ra_status) << endl;
+        cout << "[App-RA] 安全会话: " << (secure_channel_ready ? "已建立" : "未建立") << endl;
+    }
+}
+
+void start_remote_attestation()
+{
+    string peer_identity = read_line("服务提供方标识(默认 service_provider): ");
+    if (peer_identity.empty()) {
+        peer_identity = "service_provider";
+    }
+
+    int result = MSD_OK;
+    sgx_status_t status = ecall_ra_init_context(global_eid, peer_identity.c_str(), &result);
+    if (!check_sgx_status(status, "初始化远程认证上下文")) {
+        return;
+    }
+    print_ra_operation("初始化远程认证上下文", result);
+    if (result != MSD_OK) {
+        return;
+    }
+
+    uint8_t msg1[MSD_RA_MAX_MESSAGE_SIZE] = { 0 };
+    size_t msg1_size = 0;
+    status = ecall_ra_get_msg1(global_eid, msg1, sizeof(msg1), &msg1_size, &result);
+    if (!check_sgx_status(status, "生成 Msg1")) {
+        return;
+    }
+    print_ra_operation("生成 Msg1", result);
+    if (result != MSD_OK) {
+        return;
+    }
+    cout << "[App-RA] Msg1 大小: " << msg1_size << " 字节" << endl;
+
+    vector<uint8_t> msg2_response;
+    string transport_error;
+    if (!invoke_service_provider(msg1, msg1_size, msg2_response, transport_error)) {
+        cout << "[App-RA] 获取 Msg2 失败: " << transport_error << endl;
+        return;
+    }
+    if (msg2_response.empty()) {
+        cout << "[App-RA] service_provider 未返回 Msg2 内容。" << endl;
+        return;
+    }
+
+    uint32_t msg2_type = MSD_RA_MSG_NONE;
+    const uint8_t* msg2_payload = NULL;
+    size_t msg2_payload_size = 0;
+    if (!decode_ra_message(&msg2_response[0], msg2_response.size(), msg2_type, msg2_payload, msg2_payload_size) || msg2_type != MSD_RA_MSG2) {
+        cout << "[App-RA] service_provider 返回的 Msg2 格式无效。" << endl;
+        return;
+    }
+
+    uint8_t msg3[MSD_RA_MAX_MESSAGE_SIZE] = { 0 };
+    size_t msg3_size = 0;
+    status = ecall_ra_proc_msg2_get_msg3(
+        global_eid,
+        msg2_payload,
+        msg2_payload_size,
+        msg3,
+        sizeof(msg3),
+        &msg3_size,
+        &result);
+    if (!check_sgx_status(status, "处理 Msg2 并生成 Msg3")) {
+        return;
+    }
+    print_ra_operation("处理 Msg2 并生成 Msg3", result);
+    if (result != MSD_OK) {
+        return;
+    }
+    cout << "[App-RA] Msg3 大小: " << msg3_size << " 字节" << endl;
+
+    vector<uint8_t> result_response;
+    if (!invoke_service_provider(msg3, msg3_size, result_response, transport_error)) {
+        cout << "[App-RA] 获取认证结果失败: " << transport_error << endl;
+        return;
+    }
+    if (result_response.empty()) {
+        cout << "[App-RA] service_provider 未返回认证结果内容。" << endl;
+        return;
+    }
+
+    uint32_t result_type = MSD_RA_MSG_NONE;
+    const uint8_t* result_payload = NULL;
+    size_t result_payload_size = 0;
+    if (!decode_ra_message(&result_response[0], result_response.size(), result_type, result_payload, result_payload_size) || result_type != MSD_RA_ATT_RESULT) {
+        cout << "[App-RA] service_provider 返回的认证结果格式无效。" << endl;
+        return;
+    }
+
+    status = ecall_ra_finalize(
+        global_eid,
+        result_payload,
+        result_payload_size,
+        &result);
+    if (!check_sgx_status(status, "提交远程认证结果")) {
+        return;
+    }
+    print_ra_operation("提交远程认证结果", result);
+    if (result == MSD_OK) {
+        cout << "[App-RA] 已通过本地 service_provider 完成占位远程认证闭环。" << endl;
+    }
+
+    show_remote_attestation_status();
 }
 
 bool try_load_state()
@@ -572,8 +912,10 @@ void admin_menu(bool& running)
     cout << "5. 查看患者档案" << endl;
     cout << "6. 查看患者列表" << endl;
     cout << "7. 删除患者档案" << endl;
-    cout << "8. 保存系统状态" << endl;
-    cout << "9. 退出登录" << endl;
+    cout << "8. 执行远程认证" << endl;
+    cout << "9. 查看远程认证状态" << endl;
+    cout << "10. 保存系统状态" << endl;
+    cout << "11. 退出登录" << endl;
     cout << "0. 退出程序" << endl;
 
     int choice = read_int("请选择: ");
@@ -600,9 +942,15 @@ void admin_menu(bool& running)
         delete_patient_profile();
         break;
     case 8:
-        flush_state(true);
+        start_remote_attestation();
         break;
     case 9:
+        show_remote_attestation_status();
+        break;
+    case 10:
+        flush_state(true);
+        break;
+    case 11:
         logout_user();
         break;
     case 0:
@@ -624,8 +972,10 @@ void doctor_menu(bool& running)
     cout << "4. 新增病历" << endl;
     cout << "5. 修改病历" << endl;
     cout << "6. 删除病历" << endl;
-    cout << "7. 保存系统状态" << endl;
-    cout << "8. 退出登录" << endl;
+    cout << "7. 执行远程认证" << endl;
+    cout << "8. 查看远程认证状态" << endl;
+    cout << "9. 保存系统状态" << endl;
+    cout << "10. 退出登录" << endl;
     cout << "0. 退出程序" << endl;
 
     int choice = read_int("请选择: ");
@@ -649,9 +999,15 @@ void doctor_menu(bool& running)
         delete_record();
         break;
     case 7:
-        flush_state(true);
+        start_remote_attestation();
         break;
     case 8:
+        show_remote_attestation_status();
+        break;
+    case 9:
+        flush_state(true);
+        break;
+    case 10:
         logout_user();
         break;
     case 0:
@@ -670,8 +1026,10 @@ void patient_menu(bool& running)
     cout << "1. 查看我的档案" << endl;
     cout << "2. 修改我的档案" << endl;
     cout << "3. 查看我的病历" << endl;
-    cout << "4. 保存系统状态" << endl;
-    cout << "5. 退出登录" << endl;
+    cout << "4. 执行远程认证" << endl;
+    cout << "5. 查看远程认证状态" << endl;
+    cout << "6. 保存系统状态" << endl;
+    cout << "7. 退出登录" << endl;
     cout << "0. 退出程序" << endl;
 
     int choice = read_int("请选择: ");
@@ -686,9 +1044,15 @@ void patient_menu(bool& running)
         list_records_for(g_current_username);
         break;
     case 4:
-        flush_state(true);
+        start_remote_attestation();
         break;
     case 5:
+        show_remote_attestation_status();
+        break;
+    case 6:
+        flush_state(true);
+        break;
+    case 7:
         logout_user();
         break;
     case 0:

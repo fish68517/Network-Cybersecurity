@@ -6,6 +6,21 @@
         public void ecall_system_load([out] int* result);
         public void ecall_system_flush([out] int* result);
 
+        public void ecall_ra_init_context([in, string] const char* peer_identity, [out] int* result);
+        public void ecall_ra_get_msg1([out, size=buffer_size] uint8_t* buffer, size_t buffer_size, [out] size_t* actual_size, [out] int* result);
+        public void ecall_ra_proc_msg2_get_msg3(
+            [in, size=msg2_size] const uint8_t* msg2,
+            size_t msg2_size,
+            [out, size=buffer_size] uint8_t* buffer,
+            size_t buffer_size,
+            [out] size_t* actual_size,
+            [out] int* result);
+        public void ecall_ra_finalize(
+            [in, size=attestation_size] const uint8_t* attestation_result,
+            size_t attestation_size,
+            [out] int* result);
+        public void ecall_ra_get_status([out] int* ra_status, [out] int* secure_channel_ready, [out] int* result);
+
         public void ecall_register_user([in, string] const char* username, [in, string] const char* password, int role, [out] int* result);
         public void ecall_login_user([in, string] const char* username, [in, string] const char* password, [out] int* role, [out] int* result);
         public void ecall_logout_user([out] int* result);
@@ -39,5 +54,7 @@
         void ocall_save_blob([in, string] const char* file_name, [in, size=data_size] const uint8_t* data, size_t data_size, [out] int* result);
         void ocall_load_blob([in, string] const char* file_name, [out, size=max_size] uint8_t* data, size_t max_size, [out] size_t* actual_size, [out] int* result);
         void ocall_get_time([out, size=buffer_size] char* buffer, size_t buffer_size);
+        void ocall_ra_send_msg(uint32_t message_type, [in, size=data_size] const uint8_t* data, size_t data_size, [out] int* result);
+        void ocall_ra_recv_msg(uint32_t expected_message_type, [out, size=buffer_size] uint8_t* buffer, size_t buffer_size, [out] size_t* actual_size, [out] int* result);
     };
 };

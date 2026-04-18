@@ -1,0 +1,12 @@
+﻿运行方式：
+1. 双击 MedicalSystemDemo_GUI.exe
+2. 首次运行点击“初始化系统”；已有密态文件时点击“加载密态状态”
+3. 默认管理员账号：admin / admin123
+4. 请保持 sgx_gui_bridge.dll、MedicalSystemDemo.signed.dll、RemoteAttestation_sp.exe 以及全部 SGX DLL 与 GUI exe 位于同一目录
+
+关键文件：
+- GUI 程序：MedicalSystemDemo_GUI.exe
+- Bridge：sgx_gui_bridge.dll
+- Enclave：MedicalSystemDemo.signed.dll
+- 远程认证服务原型：RemoteAttestation_sp.exe
+- 密态状态文件：sealed_system_state.bin

@@ -1,0 +1,12 @@
+Run steps:
+1. Double-click MedicalSystemDemo_GUI.exe
+2. Use "Init System" for first run, or "Load State" if a sealed file already exists
+3. Default admin account: admin / admin123
+4. Keep sgx_gui_bridge.dll, MedicalSystemDemo.signed.dll, RemoteAttestation_sp.exe, and all SGX DLLs in the same directory as the GUI exe
+
+Important files:
+- GUI: MedicalSystemDemo_GUI.exe
+- Bridge: sgx_gui_bridge.dll
+- Enclave: MedicalSystemDemo.signed.dll
+- Remote attestation service prototype: RemoteAttestation_sp.exe
+- Sealed state file: sealed_system_state.bin

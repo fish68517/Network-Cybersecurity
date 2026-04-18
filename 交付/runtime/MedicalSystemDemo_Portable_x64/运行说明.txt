@@ -1,15 +1,17 @@
 ﻿运行方式：
 1. 双击 MedicalSystemDemo_app.exe
-2. 首次运行请选择 1 初始化系统
-3. 默认管理员：admin / admin123
+2. 确保 MedicalSystemDemo.signed.dll 和 RemoteAttestation_sp.exe 与主程序在同一目录
+3. 首次运行请选择 1 初始化系统
+4. 默认管理员：admin / admin123
 
 重要文件：
-- 程序：MedicalSystemDemo_app.exe
+- 主程序：MedicalSystemDemo_app.exe
 - Enclave：MedicalSystemDemo.signed.dll
+- 远程认证服务原型：RemoteAttestation_sp.exe
 - 密态状态文件：sealed_system_state.bin
-- 答辩脚本：答辩专用操作脚本.md
+- 演示脚本：答辩专用操作脚本.md
 
-日志说明：
-- 程序保存密态数据时，会打印 sealed_system_state.bin 的完整绝对路径。
-- 程序读取密态数据时，也会打印读取文件的完整绝对路径。
-- Enclave 会打印请求写入的目标文件名。
+说明：
+- 这是 SGX Simulation 演示包，适合在未安装 Visual Studio 的机器上直接演示。
+- 程序运行后会在同目录生成 sealed_system_state.bin。
+- 执行远程认证时，程序会调用同目录下的 RemoteAttestation_sp.exe 完成本地占位认证闭环。

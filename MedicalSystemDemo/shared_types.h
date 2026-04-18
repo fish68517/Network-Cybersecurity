@@ -22,6 +22,9 @@
 #define MSD_MAX_NOTE 256
 #define MSD_MAX_TIMESTAMP 32
 #define MSD_MAX_TEXT_BUFFER 8192
+#define MSD_RA_MAX_MESSAGE_SIZE 8192
+#define MSD_RA_SESSION_KEY_SIZE 32
+#define MSD_RA_MAX_IDENTITY 64
 
 enum MsdRole {
     MSD_ROLE_NONE = 0,
@@ -49,7 +52,35 @@ enum MsdResult {
     MSD_ERR_STATE_CORRUPTED = -15,
     MSD_ERR_INTERNAL = -16,
     MSD_ERR_SESSION_ACTIVE = -17,
-    MSD_ERR_PROFILE_HAS_RECORDS = -18
+    MSD_ERR_PROFILE_HAS_RECORDS = -18,
+    MSD_ERR_RA_REQUIRED = -19,
+    MSD_ERR_RA_CONTEXT_NOT_READY = -20,
+    MSD_ERR_RA_BUSY = -21,
+    MSD_ERR_RA_VERIFY_FAILED = -22,
+    MSD_ERR_SECURE_CHANNEL_NOT_READY = -23,
+    MSD_ERR_RA_MSG_INVALID = -24,
+    MSD_ERR_RA_UNSUPPORTED = -25
+};
+
+enum MsdRaStatus {
+    MSD_RA_NOT_STARTED = 0,
+    MSD_RA_CONTEXT_READY = 1,
+    MSD_RA_MSG1_READY = 2,
+    MSD_RA_WAITING_MSG2 = 3,
+    MSD_RA_MSG3_READY = 4,
+    MSD_RA_WAITING_RESULT = 5,
+    MSD_RA_VERIFIED = 6,
+    MSD_RA_FAILED = 7
+};
+
+enum MsdRaMessageType {
+    MSD_RA_MSG_NONE = 0,
+    MSD_RA_MSG0 = 1,
+    MSD_RA_MSG1 = 2,
+    MSD_RA_MSG2 = 3,
+    MSD_RA_MSG3 = 4,
+    MSD_RA_ATT_RESULT = 5,
+    MSD_RA_SECURE_CHANNEL = 6
 };
 
 typedef struct MsdUserAccount {
@@ -78,6 +109,22 @@ typedef struct MsdMedicalRecord {
     char created_at[MSD_MAX_TIMESTAMP];
     int active;
 } MsdMedicalRecord;
+
+typedef struct MsdRaMessage {
+    uint32_t message_type;
+    uint32_t payload_size;
+    uint8_t payload[MSD_RA_MAX_MESSAGE_SIZE];
+} MsdRaMessage;
+
+typedef struct MsdRaSessionState {
+    int status;
+    int secure_channel_ready;
+    uint32_t session_id;
+    uint32_t last_message_type;
+    uint32_t session_key_size;
+    char peer_identity[MSD_RA_MAX_IDENTITY];
+    uint8_t session_key[MSD_RA_SESSION_KEY_SIZE];
+} MsdRaSessionState;
 
 typedef struct MsdSystemState {
     uint32_t magic;

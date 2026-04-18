@@ -13,6 +13,40 @@ typedef struct ms_ecall_system_flush_t {
 	int* ms_result;
 } ms_ecall_system_flush_t;
 
+typedef struct ms_ecall_ra_init_context_t {
+	const char* ms_peer_identity;
+	size_t ms_peer_identity_len;
+	int* ms_result;
+} ms_ecall_ra_init_context_t;
+
+typedef struct ms_ecall_ra_get_msg1_t {
+	uint8_t* ms_buffer;
+	size_t ms_buffer_size;
+	size_t* ms_actual_size;
+	int* ms_result;
+} ms_ecall_ra_get_msg1_t;
+
+typedef struct ms_ecall_ra_proc_msg2_get_msg3_t {
+	const uint8_t* ms_msg2;
+	size_t ms_msg2_size;
+	uint8_t* ms_buffer;
+	size_t ms_buffer_size;
+	size_t* ms_actual_size;
+	int* ms_result;
+} ms_ecall_ra_proc_msg2_get_msg3_t;
+
+typedef struct ms_ecall_ra_finalize_t {
+	const uint8_t* ms_attestation_result;
+	size_t ms_attestation_size;
+	int* ms_result;
+} ms_ecall_ra_finalize_t;
+
+typedef struct ms_ecall_ra_get_status_t {
+	int* ms_ra_status;
+	int* ms_secure_channel_ready;
+	int* ms_result;
+} ms_ecall_ra_get_status_t;
+
 typedef struct ms_ecall_register_user_t {
 	const char* ms_username;
 	size_t ms_username_len;
@@ -136,6 +170,21 @@ typedef struct ms_ocall_get_time_t {
 	size_t ms_buffer_size;
 } ms_ocall_get_time_t;
 
+typedef struct ms_ocall_ra_send_msg_t {
+	uint32_t ms_message_type;
+	const uint8_t* ms_data;
+	size_t ms_data_size;
+	int* ms_result;
+} ms_ocall_ra_send_msg_t;
+
+typedef struct ms_ocall_ra_recv_msg_t {
+	uint32_t ms_expected_message_type;
+	uint8_t* ms_buffer;
+	size_t ms_buffer_size;
+	size_t* ms_actual_size;
+	int* ms_result;
+} ms_ocall_ra_recv_msg_t;
+
 typedef struct ms_sgx_oc_cpuidex_t {
 	int* ms_cpuinfo;
 	int ms_leaf;
@@ -196,6 +245,22 @@ static sgx_status_t SGX_CDECL MedicalSystemDemo_ocall_get_time(void* pms)
 	return SGX_SUCCESS;
 }
 
+static sgx_status_t SGX_CDECL MedicalSystemDemo_ocall_ra_send_msg(void* pms)
+{
+	ms_ocall_ra_send_msg_t* ms = SGX_CAST(ms_ocall_ra_send_msg_t*, pms);
+	ocall_ra_send_msg(ms->ms_message_type, ms->ms_data, ms->ms_data_size, ms->ms_result);
+
+	return SGX_SUCCESS;
+}
+
+static sgx_status_t SGX_CDECL MedicalSystemDemo_ocall_ra_recv_msg(void* pms)
+{
+	ms_ocall_ra_recv_msg_t* ms = SGX_CAST(ms_ocall_ra_recv_msg_t*, pms);
+	ocall_ra_recv_msg(ms->ms_expected_message_type, ms->ms_buffer, ms->ms_buffer_size, ms->ms_actual_size, ms->ms_result);
+
+	return SGX_SUCCESS;
+}
+
 static sgx_status_t SGX_CDECL MedicalSystemDemo_sgx_oc_cpuidex(void* pms)
 {
 	ms_sgx_oc_cpuidex_t* ms = SGX_CAST(ms_sgx_oc_cpuidex_t*, pms);
@@ -238,14 +303,16 @@ static sgx_status_t SGX_CDECL MedicalSystemDemo_sgx_thread_set_multiple_untruste
 
 static const struct {
 	size_t nr_ocall;
-	void * func_addr[9];
+	void * func_addr[11];
 } ocall_table_MedicalSystemDemo = {
-	9,
+	11,
 	{
 		(void*)(uintptr_t)MedicalSystemDemo_ocall_print_log,
 		(void*)(uintptr_t)MedicalSystemDemo_ocall_save_blob,
 		(void*)(uintptr_t)MedicalSystemDemo_ocall_load_blob,
 		(void*)(uintptr_t)MedicalSystemDemo_ocall_get_time,
+		(void*)(uintptr_t)MedicalSystemDemo_ocall_ra_send_msg,
+		(void*)(uintptr_t)MedicalSystemDemo_ocall_ra_recv_msg,
 		(void*)(uintptr_t)MedicalSystemDemo_sgx_oc_cpuidex,
 		(void*)(uintptr_t)MedicalSystemDemo_sgx_thread_wait_untrusted_event_ocall,
 		(void*)(uintptr_t)MedicalSystemDemo_sgx_thread_set_untrusted_event_ocall,
@@ -281,6 +348,65 @@ sgx_status_t ecall_system_flush(sgx_enclave_id_t eid, int* result)
 	return status;
 }
 
+sgx_status_t ecall_ra_init_context(sgx_enclave_id_t eid, const char* peer_identity, int* result)
+{
+	sgx_status_t status;
+	ms_ecall_ra_init_context_t ms;
+	ms.ms_peer_identity = peer_identity;
+	ms.ms_peer_identity_len = peer_identity ? strlen(peer_identity) + 1 : 0;
+	ms.ms_result = result;
+	status = sgx_ecall(eid, 3, &ocall_table_MedicalSystemDemo, &ms);
+	return status;
+}
+
+sgx_status_t ecall_ra_get_msg1(sgx_enclave_id_t eid, uint8_t* buffer, size_t buffer_size, size_t* actual_size, int* result)
+{
+	sgx_status_t status;
+	ms_ecall_ra_get_msg1_t ms;
+	ms.ms_buffer = buffer;
+	ms.ms_buffer_size = buffer_size;
+	ms.ms_actual_size = actual_size;
+	ms.ms_result = result;
+	status = sgx_ecall(eid, 4, &ocall_table_MedicalSystemDemo, &ms);
+	return status;
+}
+
+sgx_status_t ecall_ra_proc_msg2_get_msg3(sgx_enclave_id_t eid, const uint8_t* msg2, size_t msg2_size, uint8_t* buffer, size_t buffer_size, size_t* actual_size, int* result)
+{
+	sgx_status_t status;
+	ms_ecall_ra_proc_msg2_get_msg3_t ms;
+	ms.ms_msg2 = msg2;
+	ms.ms_msg2_size = msg2_size;
+	ms.ms_buffer = buffer;
+	ms.ms_buffer_size = buffer_size;
+	ms.ms_actual_size = actual_size;
+	ms.ms_result = result;
+	status = sgx_ecall(eid, 5, &ocall_table_MedicalSystemDemo, &ms);
+	return status;
+}
+
+sgx_status_t ecall_ra_finalize(sgx_enclave_id_t eid, const uint8_t* attestation_result, size_t attestation_size, int* result)
+{
+	sgx_status_t status;
+	ms_ecall_ra_finalize_t ms;
+	ms.ms_attestation_result = attestation_result;
+	ms.ms_attestation_size = attestation_size;
+	ms.ms_result = result;
+	status = sgx_ecall(eid, 6, &ocall_table_MedicalSystemDemo, &ms);
+	return status;
+}
+
+sgx_status_t ecall_ra_get_status(sgx_enclave_id_t eid, int* ra_status, int* secure_channel_ready, int* result)
+{
+	sgx_status_t status;
+	ms_ecall_ra_get_status_t ms;
+	ms.ms_ra_status = ra_status;
+	ms.ms_secure_channel_ready = secure_channel_ready;
+	ms.ms_result = result;
+	status = sgx_ecall(eid, 7, &ocall_table_MedicalSystemDemo, &ms);
+	return status;
+}
+
 sgx_status_t ecall_register_user(sgx_enclave_id_t eid, const char* username, const char* password, int role, int* result)
 {
 	sgx_status_t status;
@@ -291,7 +417,7 @@ sgx_status_t ecall_register_user(sgx_enclave_id_t eid, const char* username, con
 	ms.ms_password_len = password ? strlen(password) + 1 : 0;
 	ms.ms_role = role;
 	ms.ms_result = result;
-	status = sgx_ecall(eid, 3, &ocall_table_MedicalSystemDemo, &ms);
+	status = sgx_ecall(eid, 8, &ocall_table_MedicalSystemDemo, &ms);
 	return status;
 }
 
@@ -305,7 +431,7 @@ sgx_status_t ecall_login_user(sgx_enclave_id_t eid, const char* username, const 
 	ms.ms_password_len = password ? strlen(password) + 1 : 0;
 	ms.ms_role = role;
 	ms.ms_result = result;
-	status = sgx_ecall(eid, 4, &ocall_table_MedicalSystemDemo, &ms);
+	status = sgx_ecall(eid, 9, &ocall_table_MedicalSystemDemo, &ms);
 	return status;
 }
 
@@ -314,7 +440,7 @@ sgx_status_t ecall_logout_user(sgx_enclave_id_t eid, int* result)
 	sgx_status_t status;
 	ms_ecall_logout_user_t ms;
 	ms.ms_result = result;
-	status = sgx_ecall(eid, 5, &ocall_table_MedicalSystemDemo, &ms);
+	status = sgx_ecall(eid, 10, &ocall_table_MedicalSystemDemo, &ms);
 	return status;
 }
 
@@ -325,7 +451,7 @@ sgx_status_t ecall_list_users(sgx_enclave_id_t eid, char* buffer, size_t buffer_
 	ms.ms_buffer = buffer;
 	ms.ms_buffer_size = buffer_size;
 	ms.ms_result = result;
-	status = sgx_ecall(eid, 6, &ocall_table_MedicalSystemDemo, &ms);
+	status = sgx_ecall(eid, 11, &ocall_table_MedicalSystemDemo, &ms);
 	return status;
 }
 
@@ -344,7 +470,7 @@ sgx_status_t ecall_upsert_patient_profile(sgx_enclave_id_t eid, const char* pati
 	ms.ms_address = address;
 	ms.ms_address_len = address ? strlen(address) + 1 : 0;
 	ms.ms_result = result;
-	status = sgx_ecall(eid, 7, &ocall_table_MedicalSystemDemo, &ms);
+	status = sgx_ecall(eid, 12, &ocall_table_MedicalSystemDemo, &ms);
 	return status;
 }
 
@@ -357,7 +483,7 @@ sgx_status_t ecall_get_patient_profile(sgx_enclave_id_t eid, const char* patient
 	ms.ms_buffer = buffer;
 	ms.ms_buffer_size = buffer_size;
 	ms.ms_result = result;
-	status = sgx_ecall(eid, 8, &ocall_table_MedicalSystemDemo, &ms);
+	status = sgx_ecall(eid, 13, &ocall_table_MedicalSystemDemo, &ms);
 	return status;
 }
 
@@ -368,7 +494,7 @@ sgx_status_t ecall_list_patients(sgx_enclave_id_t eid, char* buffer, size_t buff
 	ms.ms_buffer = buffer;
 	ms.ms_buffer_size = buffer_size;
 	ms.ms_result = result;
-	status = sgx_ecall(eid, 9, &ocall_table_MedicalSystemDemo, &ms);
+	status = sgx_ecall(eid, 14, &ocall_table_MedicalSystemDemo, &ms);
 	return status;
 }
 
@@ -379,7 +505,7 @@ sgx_status_t ecall_delete_patient_profile(sgx_enclave_id_t eid, const char* pati
 	ms.ms_patient_username = patient_username;
 	ms.ms_patient_username_len = patient_username ? strlen(patient_username) + 1 : 0;
 	ms.ms_result = result;
-	status = sgx_ecall(eid, 10, &ocall_table_MedicalSystemDemo, &ms);
+	status = sgx_ecall(eid, 15, &ocall_table_MedicalSystemDemo, &ms);
 	return status;
 }
 
@@ -397,7 +523,7 @@ sgx_status_t ecall_create_record(sgx_enclave_id_t eid, const char* patient_usern
 	ms.ms_note_len = note ? strlen(note) + 1 : 0;
 	ms.ms_record_id = record_id;
 	ms.ms_result = result;
-	status = sgx_ecall(eid, 11, &ocall_table_MedicalSystemDemo, &ms);
+	status = sgx_ecall(eid, 16, &ocall_table_MedicalSystemDemo, &ms);
 	return status;
 }
 
@@ -410,7 +536,7 @@ sgx_status_t ecall_list_records(sgx_enclave_id_t eid, const char* patient_userna
 	ms.ms_buffer = buffer;
 	ms.ms_buffer_size = buffer_size;
 	ms.ms_result = result;
-	status = sgx_ecall(eid, 12, &ocall_table_MedicalSystemDemo, &ms);
+	status = sgx_ecall(eid, 17, &ocall_table_MedicalSystemDemo, &ms);
 	return status;
 }
 
@@ -426,7 +552,7 @@ sgx_status_t ecall_update_record(sgx_enclave_id_t eid, int record_id, const char
 	ms.ms_note = note;
 	ms.ms_note_len = note ? strlen(note) + 1 : 0;
 	ms.ms_result = result;
-	status = sgx_ecall(eid, 13, &ocall_table_MedicalSystemDemo, &ms);
+	status = sgx_ecall(eid, 18, &ocall_table_MedicalSystemDemo, &ms);
 	return status;
 }
 
@@ -436,7 +562,7 @@ sgx_status_t ecall_delete_record(sgx_enclave_id_t eid, int record_id, int* resul
 	ms_ecall_delete_record_t ms;
 	ms.ms_record_id = record_id;
 	ms.ms_result = result;
-	status = sgx_ecall(eid, 14, &ocall_table_MedicalSystemDemo, &ms);
+	status = sgx_ecall(eid, 19, &ocall_table_MedicalSystemDemo, &ms);
 	return status;
 }
 

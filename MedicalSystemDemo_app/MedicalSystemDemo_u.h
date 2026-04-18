@@ -30,6 +30,14 @@ void SGX_UBRIDGE(SGX_NOCONVENTION, ocall_load_blob, (const char* file_name, uint
 #define OCALL_GET_TIME_DEFINED__
 void SGX_UBRIDGE(SGX_NOCONVENTION, ocall_get_time, (char* buffer, size_t buffer_size));
 #endif
+#ifndef OCALL_RA_SEND_MSG_DEFINED__
+#define OCALL_RA_SEND_MSG_DEFINED__
+void SGX_UBRIDGE(SGX_NOCONVENTION, ocall_ra_send_msg, (uint32_t message_type, const uint8_t* data, size_t data_size, int* result));
+#endif
+#ifndef OCALL_RA_RECV_MSG_DEFINED__
+#define OCALL_RA_RECV_MSG_DEFINED__
+void SGX_UBRIDGE(SGX_NOCONVENTION, ocall_ra_recv_msg, (uint32_t expected_message_type, uint8_t* buffer, size_t buffer_size, size_t* actual_size, int* result));
+#endif
 #ifndef SGX_OC_CPUIDEX_DEFINED__
 #define SGX_OC_CPUIDEX_DEFINED__
 void SGX_UBRIDGE(SGX_CDECL, sgx_oc_cpuidex, (int cpuinfo[4], int leaf, int subleaf));
@@ -54,6 +62,11 @@ int SGX_UBRIDGE(SGX_CDECL, sgx_thread_set_multiple_untrusted_events_ocall, (cons
 sgx_status_t ecall_system_init(sgx_enclave_id_t eid, int* result);
 sgx_status_t ecall_system_load(sgx_enclave_id_t eid, int* result);
 sgx_status_t ecall_system_flush(sgx_enclave_id_t eid, int* result);
+sgx_status_t ecall_ra_init_context(sgx_enclave_id_t eid, const char* peer_identity, int* result);
+sgx_status_t ecall_ra_get_msg1(sgx_enclave_id_t eid, uint8_t* buffer, size_t buffer_size, size_t* actual_size, int* result);
+sgx_status_t ecall_ra_proc_msg2_get_msg3(sgx_enclave_id_t eid, const uint8_t* msg2, size_t msg2_size, uint8_t* buffer, size_t buffer_size, size_t* actual_size, int* result);
+sgx_status_t ecall_ra_finalize(sgx_enclave_id_t eid, const uint8_t* attestation_result, size_t attestation_size, int* result);
+sgx_status_t ecall_ra_get_status(sgx_enclave_id_t eid, int* ra_status, int* secure_channel_ready, int* result);
 sgx_status_t ecall_register_user(sgx_enclave_id_t eid, const char* username, const char* password, int role, int* result);
 sgx_status_t ecall_login_user(sgx_enclave_id_t eid, const char* username, const char* password, int* role, int* result);
 sgx_status_t ecall_logout_user(sgx_enclave_id_t eid, int* result);
